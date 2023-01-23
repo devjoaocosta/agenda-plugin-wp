@@ -113,6 +113,9 @@ function agenda_render_page(){
             $resultado = $wpdb->get_results('SELECT * FROM wp_agenda_plugin ORDER BY id ASC');
             
             ?>
+
+            <html>
+                <link rel="stylesheet" href="./style.css">
             <tbody>
                 <?php foreach ($resultado as $key => $valor): ?>
                     <tr>
@@ -128,6 +131,7 @@ function agenda_render_page(){
             </tbody>
         </table>
     </div>
+    </html>
     <?php
 };
 
