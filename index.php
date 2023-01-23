@@ -58,6 +58,8 @@ function agenda_menu(){
 
 function agenda_render_page(){
     ?>
+     <html>
+                <link rel="stylesheet" href="./style.css">
         <div class="container">
             <h1>Inserir Funcionario</h1>
             <form method="post">
@@ -114,8 +116,7 @@ function agenda_render_page(){
             
             ?>
 
-            <html>
-                <link rel="stylesheet" href="./style.css">
+           
             <tbody>
                 <?php foreach ($resultado as $key => $valor): ?>
                     <tr>
