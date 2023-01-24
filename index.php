@@ -3,7 +3,7 @@
  * Plugin Name: Agenda laica
  * Plugin URI: https://www.google.com/
  * Description: Este plugin funciona como uma agenda virtual
- * Version: 0.1
+ * Version: 0.2
  * Author: João Costa 
  * Author URI: https://github.com/Repto1
  * 
