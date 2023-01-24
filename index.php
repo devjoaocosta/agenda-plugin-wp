@@ -111,6 +111,7 @@ function agenda_render_page(){
                     <th scope="col">Vinculo</th>
                     <th scope="col">Departamento</th>
                     <th scope="col">Coordenador</th>
+                    <th scope="col">Ações</th>
                 </tr>
             </thead>
             <?php 
@@ -132,6 +133,7 @@ function agenda_render_page(){
                         <td><?php echo $valor->bond_type; ?></td>
                         <td><?php echo $valor->department; ?></td>
                         <td><?php echo $valor->coordinator; ?></td>
+                        <td><a href="?apagar_id=<?php echo $valor->id;?>">Excluir</a></td>
                     </tr>
                 <?php endforeach ?>
             </tbody>
@@ -160,12 +162,16 @@ if(!empty($_POST['botao'])){
             'department' => $department,
             'coordinator' => '0'
         ));
-        
-
     } else {
         echo 'Todos os campos são obrigatórios';
     }
 } 
+
+if(!empty($_GET['apagar_id'])){
+    global $wpdb;
+    $id = sanitize_text_field($_GET['apagar_id']);
+    $delete_person = $wpdb->delete('wp_agenda_plugin', array('id' => $id));
+}
 
 
 ?> 
