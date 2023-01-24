@@ -42,7 +42,7 @@
                     <div class="input-group">
                         <label>Departamento</label>
                         <select name="department">
-                            <option value="dead" selected>DEAD</option>
+                            <option value="dead" selected>Diretoria de ensino a distancia</option>
                             <option value="diretoria de administração">Diretoria de administração</option>
                             <option value="direção geral">Direção geral</option>
                             <option value="diretoria academica">Diretoria academica</option>
