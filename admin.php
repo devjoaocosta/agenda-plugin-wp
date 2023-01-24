@@ -125,7 +125,7 @@
 				'status' => $status,
             ));
         }else{
-            echo 'Todos os campos são obrigatórios';
+            echo '<h1>Todos os campos são obrigatórios</h1>';
         }
     }
 
