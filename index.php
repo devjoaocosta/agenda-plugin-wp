@@ -49,11 +49,11 @@ function jal_install() {
 
 
 
-add_action('wp_enqueue_scripts', 'callback_for_setting_up_style');
-function callback_for_setting_up_style() {
-    wp_register_style( 'style', './style.css' );
-    wp_enqueue_style( 'style' );
+function style() {
+    wp_register_style('style', plugins_url('style.css',__FILE__ ));
+    wp_enqueue_style('style');
 }
+add_action( 'admin_init','style');
 
 add_action('admin_menu', 'agenda_menu');
 
