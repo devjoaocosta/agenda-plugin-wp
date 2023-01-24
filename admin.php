@@ -50,7 +50,10 @@
                     </div>
 					   <div class="input-group">
                         <label>Status</label>
-                        <input type="text" name="status" class="form-control" placeholder="Insira o status aqui">
+                        <select name="status">
+                            <option value="ativo" selected>Ativo</option>
+                            <option value="inativo">Inativo</option>
+                        </select>
                     </div>
                     <br>
                     <div class="input-group">
