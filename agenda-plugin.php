@@ -38,6 +38,7 @@ function jal_install() {
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
 		name tinytext NOT NULL,
 		email tinytext NOT NULL,
+		phone tinytext NOT NULL,
 		function tinytext NOT NULL,
 		bond_type tinytext NOT NULL,
 		department tinytext NOT NULL,
