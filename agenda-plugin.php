@@ -34,38 +34,49 @@ function jal_install() {
 	
 	$charset_collate = $wpdb->get_charset_collate();
 
-	$sql = "CREATE TABLE $table_name . 'collaborators' (
-		ID mediumint(9) NOT NULL AUTO_INCREMENT,
-		CollaboratorName tinytext NOT NULL,
-		Email tinytext NOT NULL,
-		PRIMARY KEY  (ID)
+	$sql = "CREATE TABLE '{$table_name}collaborators' (
+		id mediumint(9) NOT NULL AUTO_INCREMENT,
+		collaborator_name tinytext NOT NULL,
+		email tinytext NOT NULL,
+		PRIMARY KEY  (id),
+		CONSTRAINT fk_responsible_id FOREIGN KEY (responsible_id) REFERENCES '{$table_name}collaborators' (id)
+		CONSTRAINT fk_substitute_id FOREIGN KEY (substitute_id) REFERENCES '{$table_name}collaborators' (id)
 	) $charset_collate;";
 
-	$sql = "CREATE TABLE $table_name . 'uorg' (
-		ID mediumint(9) NOT NULL AUTO_INCREMENT,
-		UorgName tinytext NOT NULL,
-		Email tinytext NOT NULL,
-		UorgParent mediumint(9) NOT NULL,
-		Responsible mediumint(9) NOT NULL,
-		Substitute mediumint(9) NOT NULL,
-		PRIMARY KEY  (ID)
+	$sql = "CREATE TABLE '{$table_name}uorg' (
+		id mediumint(9) NOT NULL AUTO_INCREMENT,
+		uorg_name tinytext NOT NULL,
+		email tinytext NOT NULL,
+		uorg_parent mediumint(9) NOT NULL,
+		responsible mediumint(9) NOT NULL,
+		substitute mediumint(9) NOT NULL,
+		PRIMARY KEY  (id)
 	) $charset_collate;";
 
-	$sql = "CREATE TABLE $table_name . 'rooms' (
-		ID mediumint(9) NOT NULL AUTO_INCREMENT,
+	$sql = "CREATE TABLE '{$table_name}rooms' (
+		id mediumint(9) NOT NULL AUTO_INCREMENT,
+		room_number tinytext NOT NULL,
+		phone tinytext NOT NULL,
+		PRIMARY KEY  (id),
+		CONSTRAINT sala_id
+	) $charset_collate;";
+
+	$sql = "CREATE TABLE '{$table_name}uorgrooms' (
+		id mediumint(9) NOT NULL AUTO_INCREMENT,
 		RoomNumber tinytext NOT NULL,
 		Phone tinytext NOT NULL,
-		PRIMARY KEY  (ID)
+		PRIMARY KEY  (id)
 	) $charset_collate;";
 
-	$sql = "CREATE TABLE $table_name . 'vinculo' (
-		ID mediumint(9) NOT NULL AUTO_INCREMENT,
-		CollaboratorID mediumint(9) NOT NUll,
-		UorgID mediumint(9) NOT NUll,
-		RoomID mediumint(9) NOT NUll,
-		Paper tinytext NOT NULL,
-		VinculoStatus tinytext NOT NULL,
-		PRIMARY KEY  (ID)
+
+	$sql = "CREATE TABLE '{$table_name}vinculo' (
+		id mediumint(9) NOT NULL AUTO_INCREMENT,
+		collaborator_id mediumint(9) NOT NUll,
+		uorg_id mediumint(9) NOT NUll,
+		room_id mediumint(9) NOT NUll,
+		paper tinytext NOT NULL,
+		vinculo_status tinytext NOT NULL,
+		PRIMARY KEY  (id)
 	) $charset_collate;";
 
 
