@@ -30,22 +30,44 @@ function jal_install() {
 	global $wpdb;
 	global $jal_db_version;
 
-	$table_name = $wpdb->prefix.'agenda_plugin';
+	$table_name = $wpdb->prefix.'list_';
 	
 	$charset_collate = $wpdb->get_charset_collate();
 
-	$sql = "CREATE TABLE $table_name (
-		id mediumint(9) NOT NULL AUTO_INCREMENT,
-		name tinytext NOT NULL,
-		email tinytext NOT NULL,
-		phone tinytext NOT NULL,
-		function tinytext NOT NULL,
-		bond_type tinytext NOT NULL,
-		department tinytext NOT NULL,
-		status tinytext NOT NULL,
-		coordinator boolean NOT NULL,
-		PRIMARY KEY  (id)
+	$sql = "CREATE TABLE $table_name . 'collaborators' (
+		ID mediumint(9) NOT NULL AUTO_INCREMENT,
+		CollaboratorName tinytext NOT NULL,
+		Email tinytext NOT NULL,
+		PRIMARY KEY  (ID)
 	) $charset_collate;";
+
+	$sql = "CREATE TABLE $table_name . 'uorg' (
+		ID mediumint(9) NOT NULL AUTO_INCREMENT,
+		UorgName tinytext NOT NULL,
+		Email tinytext NOT NULL,
+		UorgParent mediumint(9) NOT NULL,
+		Responsible mediumint(9) NOT NULL,
+		Substitute mediumint(9) NOT NULL,
+		PRIMARY KEY  (ID)
+	) $charset_collate;";
+
+	$sql = "CREATE TABLE $table_name . 'rooms' (
+		ID mediumint(9) NOT NULL AUTO_INCREMENT,
+		RoomNumber tinytext NOT NULL,
+		Phone tinytext NOT NULL,
+		PRIMARY KEY  (ID)
+	) $charset_collate;";
+
+	$sql = "CREATE TABLE $table_name . 'vinculo' (
+		ID mediumint(9) NOT NULL AUTO_INCREMENT,
+		CollaboratorID mediumint(9) NOT NUll,
+		UorgID mediumint(9) NOT NUll,
+		RoomID mediumint(9) NOT NUll,
+		Paper tinytext NOT NULL,
+		VinculoStatus tinytext NOT NULL,
+		PRIMARY KEY  (ID)
+	) $charset_collate;";
+
 
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 	dbDelta( $sql );
