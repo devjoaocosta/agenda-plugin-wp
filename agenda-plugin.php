@@ -1,9 +1,9 @@
 <?php 
 /**
- * Plugin Name: Agenda laica
+ * Plugin Name: Agenda laica teste
  * Plugin URI: https://www.google.com/
- * Description: Este plugin funciona como uma agenda virtual
- * Version: 0.2
+ * Description: tteste teset
+ * Version: 0.1
  * Author: João Costa 
  * Author URI: https://github.com/Repto1
  * 
@@ -34,48 +34,58 @@ function jal_install() {
 	
 	$charset_collate = $wpdb->get_charset_collate();
 
-	$sql = "CREATE TABLE '{$table_name}collaborators' (
+	$sql = "CREATE TABLE '{$table_name}collaborator' (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
-		collaborator_name tinytext NOT NULL,
+		fullname tinytext NOT NULL,
 		email tinytext NOT NULL,
 		PRIMARY KEY  (id),
-		CONSTRAINT fk_responsible_id FOREIGN KEY (responsible_id) REFERENCES '{$table_name}collaborators' (id)
-		CONSTRAINT fk_substitute_id FOREIGN KEY (substitute_id) REFERENCES '{$table_name}collaborators' (id)
 	) $charset_collate;";
 
 	$sql = "CREATE TABLE '{$table_name}uorg' (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
 		uorg_name tinytext NOT NULL,
-		email tinytext NOT NULL,
-		uorg_parent mediumint(9) NOT NULL,
-		responsible mediumint(9) NOT NULL,
-		substitute mediumint(9) NOT NULL,
+		email tinytext,
+		uorg_parent_id mediumint(9),
+		responsible_id mediumint(9) NOT NULL,
+		substitute_id mediumint(9) NOT NULL,
 		PRIMARY KEY  (id)
+		FOREIGN KEY (uorg_parent_id) REFERENCES '{$table_name}uorg' (id),
+		CONSTRAINT fk_responsible_id FOREIGN KEY (responsible_id) REFERENCES '{$table_name}collaborator' (id),
+		CONSTRAINT fk_substitute_id FOREIGN KEY (substitute_id) REFERENCES '{$table_name}collaborator' (id),
 	) $charset_collate;";
 
-	$sql = "CREATE TABLE '{$table_name}rooms' (
+	$sql = "CREATE TABLE '{$table_name}room' (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
 		room_number tinytext NOT NULL,
-		phone tinytext NOT NULL,
+		phone tinytext,
+		predio tinytext NOT NULL,
+		andar tinytext NOT NULL,
 		PRIMARY KEY  (id),
-		CONSTRAINT sala_id
+		
 	) $charset_collate;";
 
-	$sql = "CREATE TABLE '{$table_name}uorgrooms' (
+	$sql = "CREATE TABLE '{$table_name}uorg_room' (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
-		RoomNumber tinytext NOT NULL,
-		Phone tinytext NOT NULL,
-		PRIMARY KEY  (id)
+		uorg_id mediumint(9) NOT NULL,
+		room_id mediumint(9) NOT NULL,
+		PRIMARY KEY  (id),
+		CONSTRAINT fK_room_id FOREIGN KEY (room_id) REFERENCES '{$table_name}room' (id),
+		CONSTRAINT fk_uorg_id FOREIGN KEY (uorg_id) REFERENCES '{$table_name}uorg' (id),
+
 	) $charset_collate;";
 
 
 	$sql = "CREATE TABLE '{$table_name}vinculo' (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
 		collaborator_id mediumint(9) NOT NUll,
-		uorg_id mediumint(9) NOT NUll,
-		room_id mediumint(9) NOT NUll,
-		paper tinytext NOT NULL,
+		uorg_room_id mediumint(9) NOT NUll,
+		fullname tinytext NOT NULL,
+		papel tinytext NOT NULL,
 		vinculo_status tinytext NOT NULL,
+		vinculo_type tinytext NOT NULL,
+		CONSTRAINT fk_uorg_room_id FOREIGN KEY (uorg_room_id) REFERENCES '{$table_name}uorg_room' (id),
+		CONSTRAINT fk_collaborator_id FOREIGN KEY (collaborator_id) REFERENCES '{$table_name}collaborator' (id),
+		CONSTRAINT fk_fullname FOREIGN KEY (fullname) REFERENCES '{$table_name}collaborator' (fullname),
 		PRIMARY KEY  (id)
 	) $charset_collate;";
 
