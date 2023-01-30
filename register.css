@@ -1,0 +1,77 @@
+body{
+}
+div.container{
+	background-color: #fff;
+    align-items: center;
+    /* display:inline-flex; */
+    margin: -1em;
+    border-radius: 8px;
+    border: 1px solid #19AA83;
+    width: 101.4%;
+/*     height: 10em; */
+/*     box-shadow:  0px 2px 3px #00000029; */
+/*     margin-left: 8em; */
+}
+div.container{
+/*     margin: 0.5em; */
+    margin-top: 2em;
+    padding:1em;
+    padding-bottom: 1.5em;
+	border-radius: 8px;
+	border: none;
+}
+div.container{
+    margin: 0.5em;
+    margin-top: 1em;
+    padding:1em;
+    padding-bottom: 1.5em;
+    background-color: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #19AA83;
+    box-shadow:  0px 2px 3px #00000029;
+}
+div.input-group label{
+    margin-left:1.5em;
+}
+div.input-group input{
+    border-radius: 5px;
+}
+div.input-group0 input{
+    margin-left:1em;
+    background: #e9e9e9;
+	color: rgb(0, 0, 0);
+	border: 1px solid rgb(160, 160, 160);
+	border-radius: 5px;
+	box-shadow: 3px 3px 3px rgb(145, 145, 145);
+	text-shadow: none;
+    height: 1.6em;
+}
+
+div.input-group0 input:hover {
+	background: #a1a1a1;
+	color: #fff;
+	border: 1px solid rgb(160, 160, 160);
+	border-radius: 5px;
+	box-shadow: 1px 1px 1px rgb(145, 145, 145);
+	text-shadow: none;
+}
+table td{
+	width: 15em;
+	text-align: center;
+	height: 2em;
+}
+/* table{
+    border;
+} */
+/*CLASS TR2 LEMBRAR*/
+fieldset legend{
+	margin: 0.5em;
+    font: normal normal bold 20px/27px Open Sans;
+    font-size:0.7cm;
+    letter-spacing: 0px;
+}
+form{
+/* 	margin-bottom: -0.5em; */
+	margin-top: -0.9em;
+    display:inline-flex;
+}

@@ -55,21 +55,12 @@
                     global $wpdb;
                     $table_room = $wpdb->prefix.'room'; 
                     $room = $wpdb->get_results("SELECT * FROM $table_room ORDER BY id ASC");
-                    $table_uorg_room = $wpdb->prefix.'room'; 
+                    $table_uorg_room = $wpdb->prefix.'uorg_room'; 
                     $uorg_room = $wpdb->get_results("SELECT * FROM $table_uorg_room ORDER BY id ASC");
                 ?>
-                 <?php foreach($uorg_room as $value): ?>
-                    <?php if($value->uorg_id == $uorg_value->id){
-                               foreach($room as $room_value):
-                                if($value->room_id == $room_value->id){
-                                        ?>
-                                        <option value="<?php echo $room_value->id ?>"><?php echo $room_value->room_number?></option>;
-                                        <?php 
-                                };
-                               endforeach;
-                            }; ?>
+                 <?php foreach($room as $room_value):?>
+                        <option value="<?php echo $room_value->id ?>"><?php echo $room_value->room_number?></option>;
                     <?php endforeach ?>
-
             </select>
         </div>
         <br>
@@ -88,13 +79,19 @@
             <input type="text" name="phone" class="form-control" placeholder="Insira o Fone">
         </div>
         <br>
-       
         <div class="input-group">
             <label>Status</label>
             <input type="text" name="vinculo_status" class="form-control" placeholder="Insira o tipo de vinculo aqui">
 
         </div>
         <br>
+        <div class="input-group">
+            <label>Horario</label>
+            <input type="text" name="horario" class="form-control" placeholder="Insira o Horario">
+        </div>
+        <br>
+       
+
         <div class="input-group0">
             <input type="submit" name="botao" value="registrar" class="form-control btn btn-danger">
         </div>
@@ -108,10 +105,12 @@
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Nome</th>
-                <th scope="col">Email</th>
-                <th scope="col">Função</th>
+                <th scope="col">Uorg</th>
+                <th scope="col">Sala</th>
+                <th scope="col">Papel</th>
                 <th scope="col">Vinculo</th>
                 <th scope="col">Status</th>
+                <th scope="col">Fone</th>
                 <th scope="col">Horario</th>
                 <th scope="col">Ações</th>
             </tr>
@@ -141,16 +140,7 @@
                     <?php endforeach ?>
                 </td>
                 <td>
-                    <?php foreach($collaborator as $collaborator_value): ?>
-                    <?php if($collaborator_value->id == $valor_vinculo->collaborator_id) echo $collaborator_value->email; ?>
-                    <?php endforeach ?>
-                </td>
-                <td><?php echo $valor_vinculo->papel; ?></td>
-                <td><?php echo $valor_vinculo->vinculo_type; ?></td>
-                <td><?php echo $valor_vinculo->vinculo_status; ?></td>
-                <td><?php echo $valor_vinculo->horario; ?></td>
-                <td>
-                    <?php foreach($uorg_room as $uorg_room_value): ?>
+                <?php foreach($uorg_room as $uorg_room_value): ?>
                     <?php if($uorg_room_value->id == $valor_vinculo->uorg_room_id)
                             {
                                foreach($uorg as $uorg_value):
@@ -159,6 +149,21 @@
                             }; ?>
                     <?php endforeach ?>
                 </td>
+                <td>
+                <?php foreach($uorg_room as $uorg_room_value): ?>
+                    <?php if($uorg_room_value->id == $valor_vinculo->uorg_room_id)
+                            {
+                               foreach($room as $room_value):
+                                    if($room_value->id == $uorg_room_value->room_id) echo $uorg_value->room_number;
+                               endforeach;
+                            }; ?>
+                    <?php endforeach ?>
+                </td>
+                <td><?php echo $valor_vinculo->papel; ?></td>
+                <td><?php echo $valor_vinculo->phone; ?></td>
+                <td><?php echo $valor_vinculo->vinculo_type; ?></td>
+                <td><?php echo $valor_vinculo->vinculo_status; ?></td>
+                <td><?php echo $valor_vinculo->horario; ?></td>
                 <td><a href="?apagar_id=<?php echo $valor->id;?>">Excluir</a> <a
                         href="?update_row=<?php echo $valor->id;?>">Atualizar</a></td>
             </tr>
@@ -172,26 +177,36 @@
 <?php
     };
 
-    if(!empty($_POST['botao'])){
-        if(!empty($_POST['fullname']) AND !empty($_POST['email']) AND !empty($_POST['papel']) AND !empty($_POST['vinculo_type']) AND !empty($_POST['uorg'])){
-            $fullname = sanitize_text_field($_POST['fullname']);
-            $email = sanitize_text_field($_POST['email']);
-            $papel = sanitize_text_field($_POST['papel']);
-            $vinculo_type = sanitize_text_field($_POST['vinculo_type']);
-            $uorg = sanitize_text_field($_POST['uorg']);
-            $vinculo_status = sanitize_text_field($_POST['vinculo_status']);
+    global $wpdb;
 
+    $table_vinculo = $wpdb->prefix.'vinculo';
+    $table_uorg_room = $wpdb->prefix.'uorg_room'; 
+    $uorg_room = $wpdb->get_results("SELECT * FROM $table_uorg_room ORDER BY id ASC");
+
+    if(!empty($_POST['botao'])){
+        if(!empty($_POST['collaborator_id'])){
+            $collaborator_id = sanitize_text_field($_POST['collaborator_id']);
+            $uorg_id = sanitize_text_field($_POST['uorg_id']);
+            $room_id = sanitize_text_field($_POST['room_id']);
+            $papel = sanitize_text_field($_POST['papel']);
+            $phone = sanitize_text_field($_POST['phone']);
+            $vinculo_type = sanitize_text_field($_POST['vinculo_type']);
+            $vinculo_status = sanitize_text_field($_POST['vinculo_status']);
+            $horario = sanitize_text_field($_POST['horario']);
+            foreach($uorg_room as $aux):
+                if($aux->uorg_id == $uorg_id && $aux->room_id == $room_id)
+                $uorg_room_id = $aux->id;
+            endforeach;
             global $wpdb;
 
-            $wpdb->insert('wp_collaborator', array(
-                'fullname' => $fullname,
-                'email' => $email,
-            ));
-
-            $wpdb->insert('wp_list_collaborator', array(
-            'papel' => $papel,
-            'vinculo_type' => $vinculo_type,
-            'vinculo_status' => $vinculo_status,
+            $wpdb->insert("$table_vinculo", array(
+                'collaborator_id' => $collaborator_id,
+                'uorg_room_id' => $uorg_room_id,
+                'papel' => $papel,
+                'phone' => $phone,
+                'vinculo_type' => $vinculo_type,
+                'vinculo_status' => $vinculo_status,
+                'horario' => $horario,
             ));
 
         }else{
@@ -202,13 +217,13 @@
     if(!empty($_GET['apagar_id'])){
         global $wpdb;
         $id = sanitize_text_field($_GET['apagar_id']);
-        $delete_person = $wpdb->delete('wp_agenda_plugin', array('id' => $id));
+        $delete_person = $wpdb->delete("$table_vinculo", array('id' => $id));
     }
 
     if(!empty($_GET['update_row'])){
         global $wpdb;
         $id = sanitize_text_field($_GET['update_row']);
-        $update_person = $wpdb->update('wp_agenda_plugin', array(
+        $update_person = $wpdb->update("$table_vinculo", array(
         'id' => $id,
         'name' => sanitize_text_field($_POST['name']),
         'email' => sanitize_text_field($_POST['email']),
