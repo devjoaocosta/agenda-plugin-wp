@@ -1,9 +1,9 @@
 <?php 
 /**
- * Plugin Name: Agenda laica teste
+ * Plugin Name: Agenda projeto
  * Plugin URI: https://www.google.com/
- * Description: tteste teset
- * Version: 0.1
+ * Description: Projeto de agenda
+ * Version: 0.9
  * Author: João Costa 
  * Author URI: https://github.com/Repto1
  * 
