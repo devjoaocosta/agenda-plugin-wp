@@ -10,6 +10,7 @@
 
     function agenda_menu(){
         add_menu_page('Agenda', 'Agenda', 'manage_options', 'agenda_page', 'agenda_render_page', 'dashicons-welcome-view-site', '3');
+        add_submenu_page('agenda_page', 'Registro', 'Registro', 'manage_options', 'registro_page', 'registro_render_page');
     }
 
     function agenda_render_page(){
@@ -17,16 +18,59 @@
 <html>
 <link rel="stylesheet" href="./style.css">
 <div class="container1">
-    <h1>Inserir Funcionario</h1>
+    <h1>Vincular Colaborador</h1>
     <form method="post">
         <div class="input-group">
-            <label>Nome</label>
-            <input type="text" name="fullname" class="form-control" placeholder="Insira o nome aqui">
+            <label>Colaborador</label>
+            <select name="collaborator_id">
+                <?php 
+                    global $wpdb;
+                    $table_collaborator = $wpdb->prefix.'collaborator'; 
+                    $resultado_collaborator = $wpdb->get_results("SELECT * FROM $table_collaborator ORDER BY id ASC");
+                ?>
+                <?php foreach ($resultado_collaborator as $valor): ?>
+                <option value="<?php echo $valor->id ?>"><?php echo $valor->fullname?></option>
+                <?php endforeach ?>
+            </select>
         </div>
         <br>
         <div class="input-group">
-            <label>Email</label>
-            <input type="text" name="email" class="form-control" placeholder="exemplo@email.com">
+            <label>Unidade Organizacional</label>
+            <select name="uorg_id">
+                <?php 
+                    global $wpdb;
+                    $table_uorg = $wpdb->prefix.'uorg'; 
+                    $uorg = $wpdb->get_results("SELECT * FROM $table_uorg ORDER BY id ASC");
+                ?>
+                <?php foreach ($uorg as $uorg_value): ?>
+                    <option value="<?php echo $uorg_value->id ?>"><?php echo $uorg_value->uorg_name?></option>
+                <?php endforeach ?>
+            </select>
+        </div>
+        <br>
+        <div class="input-group">
+            <label>Sala</label>
+            <select name="room_id">
+                <?php 
+                    global $wpdb;
+                    $table_room = $wpdb->prefix.'room'; 
+                    $room = $wpdb->get_results("SELECT * FROM $table_room ORDER BY id ASC");
+                    $table_uorg_room = $wpdb->prefix.'room'; 
+                    $uorg_room = $wpdb->get_results("SELECT * FROM $table_uorg_room ORDER BY id ASC");
+                ?>
+                 <?php foreach($uorg_room as $value): ?>
+                    <?php if($value->uorg_id == $uorg_value->id){
+                               foreach($room as $room_value):
+                                if($value->room_id == $room_value->id){
+                                        ?>
+                                        <option value="<?php echo $room_value->id ?>"><?php echo $room_value->room_number?></option>;
+                                        <?php 
+                                };
+                               endforeach;
+                            }; ?>
+                    <?php endforeach ?>
+
+            </select>
         </div>
         <br>
         <div class="input-group">
@@ -40,23 +84,18 @@
         </div>
         <br>
         <div class="input-group">
-            <label>Unidade Organizacional</label>
-            <select name="uorg">
-                <option value="diretoria de ensino a distancia" selected>Diretoria de ensino a distancia</option>
-                <option value="diretoria de administração">Diretoria de administração</option>
-                <option value="direção geral">Direção geral</option>
-                <option value="diretoria academica">Diretoria academica</option>
-            </select>
-        </div>
-        <div class="input-group0">
-            <label>Status</label>
-            <select name="vinculo_status">
-                <option value="ativo" selected>Ativo</option>
-                <option value="inativo">Inativo</option>
-            </select>
+            <label>Fone</label>
+            <input type="text" name="phone" class="form-control" placeholder="Insira o Fone">
         </div>
         <br>
+       
         <div class="input-group">
+            <label>Status</label>
+            <input type="text" name="vinculo_status" class="form-control" placeholder="Insira o tipo de vinculo aqui">
+
+        </div>
+        <br>
+        <div class="input-group0">
             <input type="submit" name="botao" value="registrar" class="form-control btn btn-danger">
         </div>
     </form>
@@ -72,31 +111,59 @@
                 <th scope="col">Email</th>
                 <th scope="col">Função</th>
                 <th scope="col">Vinculo</th>
-                <th scope="col">Departamento</th>
                 <th scope="col">Status</th>
+                <th scope="col">Horario</th>
                 <th scope="col">Ações</th>
             </tr>
         </thead>
         <?php 
-                    global $wpdb;
-                    $table_name = $wpdb->prefix.'list_vinculo';
-                    $resultado = $wpdb->get_results('SELECT * FROM $table_name ORDER BY id ASC');
-                    ?>
+                global $wpdb;
+
+                $table_vinculo = $wpdb->prefix.'vinculo';
+                $table_collaborator = $wpdb->prefix.'collaborator'; 
+                $table_uorg_room = $wpdb->prefix.'uorg_room'; 
+                $table_uorg = $wpdb->prefix.'uorg'; 
+                
+                $resultado = $wpdb->get_results("SELECT * FROM $table_vinculo ORDER BY id ASC");
+                $collaborator = $wpdb->get_results("SELECT * FROM $table_collaborator ORDER BY id ASC");
+                $uorg_room = $wpdb->get_results("SELECT * FROM $table_uorg_room ORDER BY id ASC");
+                $uorg = $wpdb->get_results("SELECT * FROM $table_uorg ORDER BY id ASC");
+                
+        ?>
         <tbody>
-            <?php foreach ($resultado as $key => $valor): ?>
+            <?php foreach ($resultado as $valor_vinculo): ?>
+
             <tr>
-                <th scope="row"><?php echo $valor->id; ?></th>
-                <td><?php echo $valor->name; ?></td>
-                <td><?php echo $valor->email; ?></td>
-                <td><?php echo $valor->papel; ?></td>
-                <td><?php echo $valor->vinculo_type; ?></td>
-                <td><?php echo $valor->uorg; ?></td>
-                <td><?php echo $valor->coordinator; ?></td>
-                <td><?php echo $valor->vinculo_status; ?></td>
+                <th scope="row"><?php echo $valor_vinculo->id; ?></th>
+                <td>
+                    <?php foreach($collaborator as $collaborator_value): ?>
+                    <?php if($collaborator_value->id == $valor_vinculo->collaborator_id) echo $collaborator_value->fullname; ?>
+                    <?php endforeach ?>
+                </td>
+                <td>
+                    <?php foreach($collaborator as $collaborator_value): ?>
+                    <?php if($collaborator_value->id == $valor_vinculo->collaborator_id) echo $collaborator_value->email; ?>
+                    <?php endforeach ?>
+                </td>
+                <td><?php echo $valor_vinculo->papel; ?></td>
+                <td><?php echo $valor_vinculo->vinculo_type; ?></td>
+                <td><?php echo $valor_vinculo->vinculo_status; ?></td>
+                <td><?php echo $valor_vinculo->horario; ?></td>
+                <td>
+                    <?php foreach($uorg_room as $uorg_room_value): ?>
+                    <?php if($uorg_room_value->id == $valor_vinculo->uorg_room_id)
+                            {
+                               foreach($uorg as $uorg_value):
+                                    if($uorg_value->id == $uorg_room_value->uorg_id) echo $uorg_value->uorg_name;
+                               endforeach;
+                            }; ?>
+                    <?php endforeach ?>
+                </td>
                 <td><a href="?apagar_id=<?php echo $valor->id;?>">Excluir</a> <a
                         href="?update_row=<?php echo $valor->id;?>">Atualizar</a></td>
             </tr>
             <?php endforeach ?>
+
         </tbody>
     </table>
 </div>
@@ -116,7 +183,7 @@
 
             global $wpdb;
 
-            $wpdb->insert('wp_list_collaborator', array(
+            $wpdb->insert('wp_collaborator', array(
                 'fullname' => $fullname,
                 'email' => $email,
             ));
