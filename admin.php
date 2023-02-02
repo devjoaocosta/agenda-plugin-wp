@@ -151,13 +151,15 @@
                 </td>
                 <td>
                 <?php foreach($uorg_room as $uorg_room_value): ?>
-                    <?php if($uorg_room_value->id == $valor_vinculo->uorg_room_id)
+                    <?php 
+                        if($uorg_room_value->id == $valor_vinculo->uorg_room_id)  
                             {
-                               foreach($room as $room_value):
-                                    if($room_value->id == $uorg_room_value->room_id) echo $uorg_value->room_number;
-                               endforeach;
-                            }; ?>
-                    <?php endforeach ?>
+                            foreach($room as $room_value):
+                                if($room_value->id == $uorg_room_value->room_id) echo $room_value->room_number;
+                            endforeach;
+                        }; 
+                    ?>
+                <?php endforeach ?>
                 </td>
                 <td><?php echo $valor_vinculo->papel; ?></td>
                 <td><?php echo $valor_vinculo->phone; ?></td>
@@ -195,7 +197,9 @@
             $horario = sanitize_text_field($_POST['horario']);
             foreach($uorg_room as $aux):
                 if($aux->uorg_id == $uorg_id && $aux->room_id == $room_id)
-                $uorg_room_id = $aux->id;
+                    {
+                        $uorg_room_id = $aux->id;
+                    }
             endforeach;
             global $wpdb;
 

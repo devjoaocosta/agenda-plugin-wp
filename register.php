@@ -1,9 +1,4 @@
 <?php 
-    function style() {
-        wp_register_style('style', plugins_url('register.css',__FILE__ ));
-        wp_enqueue_style('style');
-    }
-    add_action( 'admin_init','style');
 
 
     function registro_render_page(){
