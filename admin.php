@@ -1,4 +1,4 @@
-<?php 
+<?php
 
     function style() {
         wp_register_style('style', plugins_url('style.css',__FILE__ ));
@@ -14,7 +14,8 @@
     }
 
     function agenda_render_page(){
-        ?>
+
+?>
 <html>
 <link rel="stylesheet" href="./style.css">
 <div class="container1">
@@ -23,9 +24,9 @@
         <div class="input-group">
             <label>Colaborador</label>
             <select name="collaborator_id">
-                <?php 
+                <?php
                     global $wpdb;
-                    $table_collaborator = $wpdb->prefix.'collaborator'; 
+                    $table_collaborator = $wpdb->prefix.'collaborator';
                     $resultado_collaborator = $wpdb->get_results("SELECT * FROM $table_collaborator ORDER BY id ASC");
                 ?>
                 <?php foreach ($resultado_collaborator as $valor): ?>
@@ -36,10 +37,10 @@
         <br>
         <div class="input-group">
             <label>Unidade Organizacional</label>
-            <select name="uorg_id">
-                <?php 
+            <select id="uorg_id" name="uorg_id">
+                <?php
                     global $wpdb;
-                    $table_uorg = $wpdb->prefix.'uorg'; 
+                    $table_uorg = $wpdb->prefix.'uorg';
                     $uorg = $wpdb->get_results("SELECT * FROM $table_uorg ORDER BY id ASC");
                 ?>
                 <?php foreach ($uorg as $uorg_value): ?>
@@ -50,17 +51,29 @@
         <br>
         <div class="input-group">
             <label>Sala</label>
-            <select name="room_id">
-                <?php 
-                    global $wpdb;
-                    $table_room = $wpdb->prefix.'room'; 
-                    $room = $wpdb->get_results("SELECT * FROM $table_room ORDER BY id ASC");
-                    $table_uorg_room = $wpdb->prefix.'uorg_room'; 
-                    $uorg_room = $wpdb->get_results("SELECT * FROM $table_uorg_room ORDER BY id ASC");
+            <select id="room_id" name="room_id">
+                <?php
+                    $table_room = $wpdb->prefix.'room';
+                    $table_uorg_room = $wpdb->prefix.'uorg_room';
+
+                    $rooms = $wpdb->get_results("
+                        SELECT $table_room.*, $table_uorg_room.uorg_id
+                        FROM $table_room
+                        INNER JOIN $table_uorg_room ON $table_uorg_room.room_id = $table_room.id
+                        ORDER BY id ASC
+                    ");
                 ?>
-                 <?php foreach($room as $room_value):?>
-                        <option value="<?php echo $room_value->id ?>"><?php echo $room_value->room_number?></option>;
-                    <?php endforeach ?>
+                <option value="null" style="display: none;" selected > </option>
+
+                <?php foreach ($rooms as $room): ?>
+                    <option
+                        id="<?= $room->uorg_id; ?>"
+                        value="<?= $room->id; ?>"
+                        style="display: none;"
+                    >
+                        <?= $room->room_number; ?>
+                    </option>
+                <?php endforeach ?>
             </select>
         </div>
         <br>
@@ -90,7 +103,7 @@
             <input type="text" name="horario" class="form-control" placeholder="Insira o Horario">
         </div>
         <br>
-       
+
 
         <div class="input-group0">
             <input type="submit" name="botao" value="registrar" class="form-control btn btn-danger">
@@ -115,19 +128,19 @@
                 <th scope="col">Ações</th>
             </tr>
         </thead>
-        <?php 
+        <?php
                 global $wpdb;
 
                 $table_vinculo = $wpdb->prefix.'vinculo';
-                $table_collaborator = $wpdb->prefix.'collaborator'; 
-                $table_uorg_room = $wpdb->prefix.'uorg_room'; 
-                $table_uorg = $wpdb->prefix.'uorg'; 
-                
+                $table_collaborator = $wpdb->prefix.'collaborator';
+                $table_uorg_room = $wpdb->prefix.'uorg_room';
+                $table_uorg = $wpdb->prefix.'uorg';
+
                 $resultado = $wpdb->get_results("SELECT * FROM $table_vinculo ORDER BY id ASC");
                 $collaborator = $wpdb->get_results("SELECT * FROM $table_collaborator ORDER BY id ASC");
                 $uorg_room = $wpdb->get_results("SELECT * FROM $table_uorg_room ORDER BY id ASC");
                 $uorg = $wpdb->get_results("SELECT * FROM $table_uorg ORDER BY id ASC");
-                
+
         ?>
         <tbody>
             <?php foreach ($resultado as $valor_vinculo): ?>
@@ -151,13 +164,19 @@
                 </td>
                 <td>
                 <?php foreach($uorg_room as $uorg_room_value): ?>
-                    <?php 
-                        if($uorg_room_value->id == $valor_vinculo->uorg_room_id)  
+                    <?php
+                        global $wpdb;
+                        $table_room = $wpdb->prefix.'room';
+                        $room = $wpdb->get_results("SELECT * FROM $table_room ORDER BY id ASC");
+                        $table_uorg_room = $wpdb->prefix.'uorg_room';
+                        $uorg_room = $wpdb->get_results("SELECT * FROM $table_uorg_room ORDER BY id ASC");
+
+                        if($uorg_room_value->id == $valor_vinculo->uorg_room_id)
                             {
                             foreach($room as $room_value):
                                 if($room_value->id == $uorg_room_value->room_id) echo $room_value->room_number;
                             endforeach;
-                        }; 
+                        };
                     ?>
                 <?php endforeach ?>
                 </td>
@@ -175,6 +194,36 @@
     </table>
 </div>
 
+<script>
+
+    // filter rooms on select by selected uorg
+    const domqs = document.querySelector.bind(document);
+    const domqsAll = document.querySelectorAll.bind(document);
+
+    const uorgSelect = domqs('#uorg_id');
+
+    function showOptionByUorgId (uorgId) {
+        const options = domqsAll('#room_id > option');
+
+        options.forEach((option) => {
+            if(option.id == uorgId) {
+                option.style.display = 'block';
+            }
+            else {
+                option.style.display = 'none';
+            }
+        })
+
+    }
+
+    uorgSelect.addEventListener('change', (ev) => {
+        const uorgId = ev.target.value;
+        showOptionByUorgId(uorgId);
+        domqs('#room_id').value = 'null';
+    })
+
+</script>
+
 </html>
 <?php
     };
@@ -182,7 +231,7 @@
     global $wpdb;
 
     $table_vinculo = $wpdb->prefix.'vinculo';
-    $table_uorg_room = $wpdb->prefix.'uorg_room'; 
+    $table_uorg_room = $wpdb->prefix.'uorg_room';
     $uorg_room = $wpdb->get_results("SELECT * FROM $table_uorg_room ORDER BY id ASC");
 
     if(!empty($_POST['botao'])){

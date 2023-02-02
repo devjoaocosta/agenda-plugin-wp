@@ -5,7 +5,6 @@
         ?>
 <html>
 <link rel="stylesheet" href="./style.css">
-<link rel="stylesheet" href="./register.css">
 <div class="container1">
     <h1>Inserir Colaborador</h1>
     <form method="post">
