@@ -10,12 +10,14 @@
     <form method="post">
         <div class="input-group">
             <label>Nome</label>
-            <input type="text" name="fullname" class="form-control" placeholder="Insira o nome aqui">
+            <input method="post" type="text" name="fullname" id="fullname" class="form-control"
+                placeholder="Insira o nome aqui">
         </div>
         <br>
         <div class="input-group">
             <label>Email</label>
-            <input type="text" name="email" class="form-control" placeholder="exemplo@email.com">
+            <input method="post" type="text" name="email" id="email" class="form-control"
+                placeholder="exemplo@email.com">
         </div>
         <br>
         <div class="input-group0">
@@ -23,6 +25,7 @@
         </div>
     </form>
 </div>
+
 
 <div class="container">
     <h1>Colaboradores</h1>
@@ -34,18 +37,21 @@
             </tr>
         </thead>
         <?php 
+        
                 global $wpdb;
                 $table_collaborator = $wpdb->prefix.'collaborator'; 
                 $collaborator = $wpdb->get_results("SELECT * FROM $table_collaborator ORDER BY id ASC");       
         ?>
         <tbody>
-            <?php foreach ($collaborator as $valor): ?>
+            <?php foreach ($collaborator as $valor_collaborator): ?>
 
             <tr>
-                <td><?php echo $valor->fullname; ?></td>
-                <td><?php echo $valor->email; ?></td>
-                <td><a href="?apagar_id=<?php echo $valor->id;?>">Excluir</a> <a
-                        href="?update_row=<?php echo $valor->id;?>">Atualizar</a></td>
+                <td><?php echo $valor_collaborator->fullname; ?></td>
+                <td><?php echo $valor_collaborator->email; ?></td>
+                <td>
+                    <button onclick="location.href='?apagar_id=<?php echo $valor_collaborator->id;?>'">Excluir</button>
+                    <button onclick="getLinkForUpdateCollaborator()">Atualizar</button>
+                </td>
             </tr>
             <?php endforeach ?>
 
@@ -59,23 +65,23 @@
     <form method="post">
         <div class="input-group">
             <label>Nome</label>
-            <input type="text" name="uorg_name" class="form-control" placeholder="Insira o nome aqui">
+            <input method="post" type="text" name="uorg_name" id="uorg_name" class="form-control" placeholder="Insira o nome aqui">
         </div>
         <br>
         <div class="input-group">
             <label>Email</label>
-            <input type="text" name="email" class="form-control" placeholder="exemplo@email.com">
+            <input method="post" type="text" name="email" id="uorg_email" class="form-control" placeholder="exemplo@email.com">
         </div>
         <br>
 
         <div class="input-group">
             <label>Uorg Mãe</label>
-            <select name="uorg_parent_id">
+            <select id="uorg_parent_id" name="uorg_parent_id">
                 <?php 
-            global $wpdb;
-            $table_uorg = $wpdb->prefix.'uorg'; 
-            $uorg = $wpdb->get_results("SELECT * FROM $table_uorg ORDER BY id ASC");
-            ?>
+                global $wpdb;
+                $table_uorg = $wpdb->prefix.'uorg'; 
+                $uorg = $wpdb->get_results("SELECT * FROM $table_uorg ORDER BY id ASC");
+                ?>
                 <?php foreach ($uorg as $valor): ?>
                 <option value="<?php echo $valor->id ?>"><?php echo $valor->uorg_name?></option>
                 <?php endforeach ?>
@@ -84,12 +90,12 @@
         <br>
         <div class="input-group">
             <label>Responsável</label>
-            <select name="responsible_id">
+            <select id="responsible_id" name="responsible_id">
                 <?php 
-            global $wpdb;
-            $table_collaborator = $wpdb->prefix.'collaborator'; 
-            $collaborator = $wpdb->get_results("SELECT * FROM $table_collaborator ORDER BY id ASC");
-            ?>
+                global $wpdb;
+                $table_collaborator = $wpdb->prefix.'collaborator'; 
+                $collaborator = $wpdb->get_results("SELECT * FROM $table_collaborator ORDER BY id ASC");
+                ?>
                 <?php foreach ($collaborator as $valor): ?>
                 <option value="<?php echo $valor->id ?>"><?php echo $valor->fullname?></option>
                 <?php endforeach ?>
@@ -98,7 +104,7 @@
 
         <div class="input-group">
             <label>Substituto</label>
-            <select name="substitute_id">
+            <select id="substitute_id" name="substitute_id">
                 <?php 
             global $wpdb;
             $table_collaborator = $wpdb->prefix.'collaborator'; 
@@ -138,28 +144,30 @@
 
         ?>
         <tbody>
-            <?php foreach ($uorg as $valor): ?>
+            <?php foreach ($uorg as $valor_uorg): ?>
 
             <tr>
-                <td><?php echo $valor->uorg_name; ?></td>
-                <td><?php echo $valor->email; ?></td>
+                <td><?php echo $valor_uorg->uorg_name; ?></td>
+                <td><?php echo $valor_uorg->email; ?></td>
                 <td>
                     <?php foreach($uorg as $aux): ?>
-                    <?php if($valor->uorg_parent_id == $aux->id) echo $aux->uorg_name; ?>
+                    <?php if($valor_uorg->uorg_parent_id == $aux->id) echo $aux->uorg_name; ?>
                     <?php endforeach ?>
                 </td>
                 <td>
                     <?php foreach($collaborator as $aux): ?>
-                    <?php if($valor->responsible_id == $aux->id) echo $aux->fullname; ?>
+                    <?php if($valor_uorg->responsible_id == $aux->id) echo $aux->fullname; ?>
                     <?php endforeach ?>
                 </td>
                 <td>
                     <?php foreach($collaborator as $aux): ?>
-                    <?php if($valor->substitute_id == $aux->id) echo $aux->fullname; ?>
+                    <?php if($valor_uorg->substitute_id == $aux->id) echo $aux->fullname; ?>
                     <?php endforeach ?>
                 </td>
-                <td><a href="?apagar_id=<?php echo $valor->id;?>">Excluir</a> <a
-                        href="?update_row=<?php echo $valor->id;?>">Atualizar</a></td>
+                <td>
+                    <button onclick="location.href='?apagar_id=<?php echo $valor_uorg->id;?>'">Excluir</button>
+                    <button onclick="getLinkForUpdateUorg()">Atualizar</button>
+                </td>
             </tr>
             <?php endforeach ?>
 
@@ -172,22 +180,23 @@
     <form method="post">
         <div class="input-group">
             <label>Numero</label>
-            <input type="text" name="room_number" class="form-control" placeholder="Insira o nome aqui">
+            <input type="text" name="room_number" id="room_number" class="form-control"
+                placeholder="Insira o nome aqui">
         </div>
         <br>
         <div class="input-group">
             <label>Predio</label>
-            <input type="text" name="predio" class="form-control" placeholder="exemplo@email.com">
+            <input type="text" name="predio" id="predio" class="form-control" placeholder="exemplo@email.com">
         </div>
         <br>
         <div class="input-group">
             <label>Andar</label>
-            <input type="text" name="andar" class="form-control" placeholder="exemplo@email.com">
+            <input type="text" name="andar" id="andar" class="form-control" placeholder="exemplo@email.com">
         </div>
         <br>
         <div class="input-group">
             <label>Unidade Organizacional</label>
-            <select name="uorg_id">
+            <select id="uorg_id" name="uorg_id">
                 <?php 
             global $wpdb;
             $table_uorg = $wpdb->prefix.'uorg'; 
@@ -229,24 +238,26 @@
 
         ?>
         <tbody>
-            <?php foreach ($room as $valor): ?>
+            <?php foreach ($room as $valor_room): ?>
 
             <tr>
-                <td><?php echo $valor->room_number; ?></td>
-                <td><?php echo $valor->predio; ?></td>
-                <td><?php echo $valor->andar; ?></td>
+                <td><?php echo $valor_room->room_number; ?></td>
+                <td><?php echo $valor_room->predio; ?></td>
+                <td><?php echo $valor_room->andar; ?></td>
                 <td>
                     <?php foreach($uorg_room as $uorg_room_value): ?>
-                        <?php if($uorg_room_value->id == $valor->id)
+                    <?php if($uorg_room_value->id == $valor_room->id)
                             {
                                foreach($uorg as $uorg_value):
                                     if($uorg_value->id == $uorg_room_value->uorg_id) echo $uorg_value->uorg_name;
                                endforeach;
                             }; ?>
-                    <?php endforeach ?>    
+                    <?php endforeach ?>
                 </td>
-                <td><a href="?apagar_room_id=<?php echo $valor->id;?>">Excluir</a> <a
-                        href="?update_row=<?php echo $valor->id;?>">Atualizar</a></td>
+                <td>
+                    <button onclick="location.href='?apagar_id=<?php echo $valor_room->id;?>'">Excluir</button>
+                    <button onclick="getLinkForUpdate()">Atualizar</button>
+                </td>
             </tr>
             <?php endforeach ?>
 
@@ -254,14 +265,41 @@
     </table>
 </div>
 
-</html>
+<script>
+const fullnameInput = document.querySelector("input#fullname");
+const emailInput = document.querySelector("input#email");
 
+function getLinkForUpdateCollaborator() {
+    location.href =
+        `?update_collaborator_row=<?php echo $valor_collaborator->id;?>&fullname=${fullnameInput.value}&email=${emailInput.value}`;
+};
+
+
+
+const uorgNameInput = document.querySelector("input#uorg_name");
+const uorgEmailInput = document.querySelector("input#uorg_email");
+
+function getLinkForUpdateUorg() {
+    location.href =
+        `?update_uorg_row=<?php echo $valor_uorg->id;?>&uorgName=${uorgNameInput.value}&uorgEmail=${uorgEmailInput.value}`;
+};
+
+
+
+const roomNumberInput = document.querySelector("input#room_number");
+const uorgRoomIdInput = document.querySelector("input#uorg_room_id");
+
+function getLinkForUpdateRoom() {
+    location.href =`?update_room_row=<?php echo $valor_room->id;?>&uorgName=${uorgNameInput.value}&uorgEmail=${uorgEmailInput.value}`;
+};
+</script>
+
+</html>
 
 <!-- COLLABORATOR -->
 
 <?php
     }
-    
     
     $table_collaborator = $wpdb->prefix.'collaborator'; 
  
@@ -286,6 +324,41 @@
         $id = sanitize_text_field($_GET['apagar_id']);
         $delete_collaborator = $wpdb->delete("$table_collaborator", array('id' => $id));
     };
+
+    if (isset($_GET['update_collaborator_row'])) {
+        $fullname = $_GET['fullname'];
+        $email = $_GET['email'];
+        global $wpdb;
+        
+        $id = intval( $_GET['update_collaborator_row'] );
+        $table_collaborator = $wpdb->prefix.'collaborator'; 
+        
+        $data = array(
+            'fullname' => $fullname,
+        'email' => $email
+        );
+            
+        $where = array(
+            'id' => $id
+        );
+
+        $update_person = $wpdb->update(
+            $table_collaborator, 
+            $data,
+            array( 'id' => $id ),
+            array( '%s', '%s' ),
+            array( '%d' )
+        );
+
+        if ( false === $update_person ) {
+            // Erro na atualização
+            echo '<script> alert("nao funcionou")</script>' . $wpdb->last_error;
+            
+        } else {
+            // Atualização realizada com sucesso
+            echo '<script> alert("nao funcionou")</script>';
+        }
+    }
 ?>
 
 <!-- UORG -->
@@ -322,6 +395,44 @@
         $id = sanitize_text_field($_GET['apagar_id']);
         $delete_person = $wpdb->delete("$table_uorg", array('id' => $id));
     }
+
+    if (isset($_GET['update_uorg_row'])) {
+        $uorg_name = $_GET['uorg_name'];
+        $uorg_email = $_GET['uorg_email'];
+        global $wpdb;
+        
+        $id = intval( $_GET['update_uorg_row'] );
+        $table_uorg = $wpdb->prefix.'uorg'; 
+        
+        $data = array(
+            'uorg_name' => $uorg_name,
+        'email' => $uorg_email
+        );
+            
+        $where = array(
+            'id' => $id
+        );
+
+        $update_uorg = $wpdb->update(
+            $table_uorg, 
+            $data,
+            array( 'id' => $id ),
+            array( '%s', '%s' ),
+            array( '%d' )
+        );
+
+        if ( false === $update_uorg ) {
+            // Erro na atualização
+            echo '<script> alert("nao funcionou")</script>' . $wpdb->last_error;
+            
+        } else {
+            // Atualização realizada com sucesso
+            echo '<script> alert("nao funcionou")</script>';
+        }
+    }
+
+
+    
 ?>
 
 
