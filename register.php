@@ -49,8 +49,8 @@
                 <td><?php echo $valor_collaborator->fullname; ?></td>
                 <td><?php echo $valor_collaborator->email; ?></td>
                 <td>
-                    <button onclick="location.href='?apagar_id=<?php echo $valor_collaborator->id;?>'">Excluir</button>
-                    <button onclick="getLinkForUpdateCollaborator()">Atualizar</button>
+                    <button onclick="location.href='?apagar_collaborator_id=<?php echo $valor_collaborator->id;?>'">Excluir</button>
+                    <button onclick="getLinkForUpdateCollaborator(<?php echo $valor_collaborator->id;?>)">Atualizar</button>
                 </td>
             </tr>
             <?php endforeach ?>
@@ -90,7 +90,7 @@
         <br>
         <div class="input-group">
             <label>Responsável</label>
-            <select id="responsible_id" name="responsible_id">
+            <select method="post" type="text" id="uorg_responsible" name="responsible_id">
                 <?php 
                 global $wpdb;
                 $table_collaborator = $wpdb->prefix.'collaborator'; 
@@ -104,7 +104,7 @@
 
         <div class="input-group">
             <label>Substituto</label>
-            <select id="substitute_id" name="substitute_id">
+            <select method="post" type="text" id="uorg_substitute" name="substitute_id">
                 <?php 
             global $wpdb;
             $table_collaborator = $wpdb->prefix.'collaborator'; 
@@ -165,8 +165,8 @@
                     <?php endforeach ?>
                 </td>
                 <td>
-                    <button onclick="location.href='?apagar_id=<?php echo $valor_uorg->id;?>'">Excluir</button>
-                    <button onclick="getLinkForUpdateUorg()">Atualizar</button>
+                    <button onclick="location.href='?apagar_uorg_id=<?php echo $valor_uorg->id;?>'">Excluir</button>
+                    <button onclick="getLinkForUpdateUorg(<?php echo $valor_uorg->id;?>)">Atualizar</button>
                 </td>
             </tr>
             <?php endforeach ?>
@@ -255,8 +255,8 @@
                     <?php endforeach ?>
                 </td>
                 <td>
-                    <button onclick="location.href='?apagar_id=<?php echo $valor_room->id;?>'">Excluir</button>
-                    <button onclick="getLinkForUpdate()">Atualizar</button>
+                    <button onclick="location.href='?apagar_room_id=<?php echo $valor_room->id;?>'">Excluir</button>
+                    <button onclick="getLinkForUpdateRoom(<?php echo $valor_room->id;?>)">Atualizar</button>
                 </td>
             </tr>
             <?php endforeach ?>
@@ -269,28 +269,32 @@
 const fullnameInput = document.querySelector("input#fullname");
 const emailInput = document.querySelector("input#email");
 
-function getLinkForUpdateCollaborator() {
+function getLinkForUpdateCollaborator(id) {
     location.href =
-        `?update_collaborator_row=<?php echo $valor_collaborator->id;?>&fullname=${fullnameInput.value}&email=${emailInput.value}`;
+        `?update_collaborator_row=${id}&fullname=${fullnameInput.value}&email=${emailInput.value}`;
 };
 
 
 
 const uorgNameInput = document.querySelector("input#uorg_name");
 const uorgEmailInput = document.querySelector("input#uorg_email");
+const uorgResponsibleSelect = document.querySelector("select#uorg_responsible");
+const uorgSubstituteSelect = document.querySelector("select#uorg_substitute");
 
-function getLinkForUpdateUorg() {
+function getLinkForUpdateUorg(id) {
     location.href =
-        `?update_uorg_row=<?php echo $valor_uorg->id;?>&uorgName=${uorgNameInput.value}&uorgEmail=${uorgEmailInput.value}`;
+        `?update_uorg_row=${id}&uorgName=${uorgNameInput.value}&uorgEmail=${uorgEmailInput.value}&uorgResponsible=${uorgResponsibleSelect.value}&uorgSubstitute=${uorgSubstituteSelect.value}`;
 };
 
 
 
 const roomNumberInput = document.querySelector("input#room_number");
-const uorgRoomIdInput = document.querySelector("input#uorg_room_id");
+const predioInput = document.querySelector("input#predio");
+const andarInput = document.querySelector("input#andar");
+const uorgInput = document.querySelector("select#uorg_id");
 
-function getLinkForUpdateRoom() {
-    location.href =`?update_room_row=<?php echo $valor_room->id;?>&uorgName=${uorgNameInput.value}&uorgEmail=${uorgEmailInput.value}`;
+function getLinkForUpdateRoom(id) {
+    location.href =`?update_room_row=${id}&roomNumber=${roomNumberInput.value}&predio=${predioInput.value}&andar=${andarInput.value}&uorg=${uorgInput.value}`;
 };
 </script>
 
@@ -314,15 +318,17 @@ function getLinkForUpdateRoom() {
                 'fullname' => $fullname,
                 'email' => $email,
             ));
+            wp_safe_redirect( wp_get_referer() );
 
         }else{
             echo '<h1>Todos os campos são obrigatórios</h1>';
         }
     }
-    if(!empty($_GET['apagar_id'])){
+    if(!empty($_GET['apagar_collaborator_id'])){
         global $wpdb;
-        $id = sanitize_text_field($_GET['apagar_id']);
+        $id = sanitize_text_field($_GET['apagar_collaborator_id']);
         $delete_collaborator = $wpdb->delete("$table_collaborator", array('id' => $id));
+        wp_safe_redirect( wp_get_referer() );
     };
 
     if (isset($_GET['update_collaborator_row'])) {
@@ -335,14 +341,14 @@ function getLinkForUpdateRoom() {
         
         $data = array(
             'fullname' => $fullname,
-        'email' => $email
+            'email' => $email,
         );
             
         $where = array(
-            'id' => $id
+            'id' => $id,
         );
 
-        $update_person = $wpdb->update(
+        $update_collaborator = $wpdb->update(
             $table_collaborator, 
             $data,
             array( 'id' => $id ),
@@ -350,13 +356,13 @@ function getLinkForUpdateRoom() {
             array( '%d' )
         );
 
-        if ( false === $update_person ) {
+        if ( false === $update_collaborator ) {
             // Erro na atualização
             echo '<script> alert("nao funcionou")</script>' . $wpdb->last_error;
             
         } else {
             // Atualização realizada com sucesso
-            echo '<script> alert("nao funcionou")</script>';
+            wp_safe_redirect( wp_get_referer() );
         }
     }
 ?>
@@ -385,29 +391,28 @@ function getLinkForUpdateRoom() {
                 'responsible_id' => $responsible_id,
                 'substitute_id' => $substitute_id,
             ));
-
+            wp_safe_redirect( wp_get_referer() );
         }else{
             echo '<h1>Todos os campos são obrigatórios</h1>';
         }
     }
-    if(!empty($_GET['apagar_id'])){
+    if(!empty($_GET['apagar_uorg_id'])){
         global $wpdb;
-        $id = sanitize_text_field($_GET['apagar_id']);
+        $id = sanitize_text_field($_GET['apagar_uorg_id']);
         $delete_person = $wpdb->delete("$table_uorg", array('id' => $id));
+        wp_safe_redirect( wp_get_referer() );
     }
 
     if (isset($_GET['update_uorg_row'])) {
-        $uorg_name = $_GET['uorg_name'];
-        $uorg_email = $_GET['uorg_email'];
+        $uorg_name = $_GET['uorgName'];
+        $uorg_email = $_GET['uorgEmail'];
+        $uorg_responsible = $_GET['uorgResponsible'];
+        $uorg_substitute = $_GET['uorgSubstitute'];
         global $wpdb;
         
-        $id = intval( $_GET['update_uorg_row'] );
+        $id = $_GET['update_uorg_row'];
         $table_uorg = $wpdb->prefix.'uorg'; 
         
-        $data = array(
-            'uorg_name' => $uorg_name,
-        'email' => $uorg_email
-        );
             
         $where = array(
             'id' => $id
@@ -415,7 +420,12 @@ function getLinkForUpdateRoom() {
 
         $update_uorg = $wpdb->update(
             $table_uorg, 
-            $data,
+            array(
+                'uorg_name' => $uorg_name,
+                'email' => $uorg_email,
+                'responsible_id' => $uorg_responsible,
+                'substitute_id' => $uorg_substitute,
+            ),
             array( 'id' => $id ),
             array( '%s', '%s' ),
             array( '%d' )
@@ -427,12 +437,9 @@ function getLinkForUpdateRoom() {
             
         } else {
             // Atualização realizada com sucesso
-            echo '<script> alert("nao funcionou")</script>';
+            wp_safe_redirect( wp_get_referer() );
         }
     }
-
-
-    
 ?>
 
 
@@ -447,9 +454,6 @@ function getLinkForUpdateRoom() {
         $room_id = $valor->last_id+1;
     endforeach;
 
-
-    
- 
     if(!empty($_POST['botao_room'])){
         if(!empty($_POST['room_number']) AND !empty($_POST['predio']) AND !empty($_POST['andar']) AND !empty($_POST['uorg_id'])){
             $room_number = sanitize_text_field($_POST['room_number']);
@@ -469,16 +473,61 @@ function getLinkForUpdateRoom() {
                 'uorg_id' => $uorg_id,
                 'room_id' => $room_id,
             ));
+            wp_safe_redirect( wp_get_referer() );
+
 
         }else{
             echo '<h1>Todos os campos são obrigatórios</h1>';
         }
     }
+
     if(!empty($_GET['apagar_room_id'])){
+        $table_room = $wpdb->prefix.'room'; 
         global $wpdb;
+
         $id_uorg_room = sanitize_text_field($_GET['apagar_room_id']);
         $id_room = sanitize_text_field($_GET['apagar_room_id']);
         $delete_uorg_room = $wpdb->delete("$table_uorg_room", array('id' => $id_uorg_room));
         $delete_room = $wpdb->delete("$table_room", array('id' => $id_room));
+        wp_safe_redirect( wp_get_referer() );
     }
+
+    if (isset($_GET['update_room_row'])) {
+        $roomNumber = $_GET['roomNumber'];
+        $predio = $_GET['predio'];
+        $andar = $_GET['andar'];
+        $uorgId = $_GET['uorg'];
+        global $wpdb;
+        
+        $id = intval( $_GET['update_room_row'] );
+        $table_room = $wpdb->prefix.'room'; 
+        
+        $data = array(
+            'room_number' => $roomNumber,
+            'predio' => $predio,
+            'andar' => $andar,
+        );
+            
+        $where = array(
+            'id' => $id
+        );
+
+        $update_room = $wpdb->update(
+            $table_room, 
+            $data,
+            array( 'id' => $id ),
+            array( '%s', '%s' ),
+            array( '%d' )
+        );
+
+        if ( false === $update_room ) {
+            // Erro na atualização
+            echo '<script> alert("nao funcionou")</script>' . $wpdb->last_error;
+            
+        } else {
+            // Atualização realizada com sucesso
+            wp_safe_redirect( wp_get_referer() );
+        }
+    }
+
 ?>
