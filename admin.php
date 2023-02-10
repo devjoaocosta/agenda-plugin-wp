@@ -18,12 +18,12 @@
 ?>
 <html>
 <link rel="stylesheet" href="./style.css">
-<div class="container1">
+<div class="container ex">
     <h1>Vincular Colaborador</h1>
     <form method="post">
         <div class="input-group">
             <label>Colaborador</label>
-            <select name="collaborator_id">
+            <select id="collaborator" name="collaborator_id">
                 <?php
                     global $wpdb;
                     $table_collaborator = $wpdb->prefix.'collaborator';
@@ -44,7 +44,7 @@
                     $uorg = $wpdb->get_results("SELECT * FROM $table_uorg ORDER BY id ASC");
                 ?>
                 <?php foreach ($uorg as $uorg_value): ?>
-                    <option value="<?php echo $uorg_value->id ?>"><?php echo $uorg_value->uorg_name?></option>
+                <option value="<?php echo $uorg_value->id ?>"><?php echo $uorg_value->uorg_name?></option>
                 <?php endforeach ?>
             </select>
         </div>
@@ -63,44 +63,42 @@
                         ORDER BY id ASC
                     ");
                 ?>
-                <option value="null" style="display: none;" selected > </option>
+                <option value="null" style="display: none;" selected> </option>
 
                 <?php foreach ($rooms as $room): ?>
-                    <option
-                        id="<?= $room->uorg_id; ?>"
-                        value="<?= $room->id; ?>"
-                        style="display: none;"
-                    >
-                        <?= $room->room_number; ?>
-                    </option>
+                <option id="<?= $room->uorg_id; ?>" value="<?= $room->id; ?>" style="display: none;">
+                    <?= $room->room_number; ?>
+                </option>
                 <?php endforeach ?>
             </select>
         </div>
         <br>
         <div class="input-group">
             <label>Papel</label>
-            <input type="text" name="papel" class="form-control" placeholder="Insira a função aqui">
+            <input type="text" id="papel" name="papel" class="form-control" placeholder="Insira a função aqui">
         </div>
         <br>
         <div class="input-group">
             <label>Vinculo</label>
-            <input type="text" name="vinculo_type" class="form-control" placeholder="Insira o tipo de vinculo aqui">
+            <input type="text" id="vinculo" name="vinculo_type" class="form-control"
+                placeholder="Insira o tipo de vinculo aqui">
         </div>
         <br>
         <div class="input-group">
             <label>Fone</label>
-            <input type="text" name="phone" class="form-control" placeholder="Insira o Fone">
+            <input type="text" id="phone" name="phone" class="form-control" placeholder="Insira o Fone">
         </div>
         <br>
         <div class="input-group">
             <label>Status</label>
-            <input type="text" name="vinculo_status" class="form-control" placeholder="Insira o tipo de vinculo aqui">
+            <input type="text" id="status" name="vinculo_status" class="form-control"
+                placeholder="Insira o tipo de vinculo aqui">
 
         </div>
         <br>
         <div class="input-group">
             <label>Horario</label>
-            <input type="text" name="horario" class="form-control" placeholder="Insira o Horario">
+            <input type="text" id="horario" name="horario" class="form-control" placeholder="Insira o Horario">
         </div>
         <br>
 
@@ -111,7 +109,7 @@
     </form>
 </div>
 
-<div class="container">
+<div class="container add">
     <h1>Agenda</h1>
     <table class="table table-striped">
         <thead>
@@ -153,7 +151,7 @@
                     <?php endforeach ?>
                 </td>
                 <td>
-                <?php foreach($uorg_room as $uorg_room_value): ?>
+                    <?php foreach($uorg_room as $uorg_room_value): ?>
                     <?php if($uorg_room_value->id == $valor_vinculo->uorg_room_id)
                             {
                                foreach($uorg as $uorg_value):
@@ -163,7 +161,7 @@
                     <?php endforeach ?>
                 </td>
                 <td>
-                <?php foreach($uorg_room as $uorg_room_value): ?>
+                    <?php foreach($uorg_room as $uorg_room_value): ?>
                     <?php
                         global $wpdb;
                         $table_room = $wpdb->prefix.'room';
@@ -178,15 +176,17 @@
                             endforeach;
                         };
                     ?>
-                <?php endforeach ?>
+                    <?php endforeach ?>
                 </td>
                 <td><?php echo $valor_vinculo->papel; ?></td>
                 <td><?php echo $valor_vinculo->phone; ?></td>
                 <td><?php echo $valor_vinculo->vinculo_type; ?></td>
                 <td><?php echo $valor_vinculo->vinculo_status; ?></td>
                 <td><?php echo $valor_vinculo->horario; ?></td>
-                <td><a href="?apagar_id=<?php echo $valor->id;?>">Excluir</a> <a
-                        href="?update_row=<?php echo $valor->id;?>">Atualizar</a></td>
+                <td>
+                    <button onclick="location.href='?apagar_id=<?php echo $valor_vinculo->id;?>'">Excluir</button>
+                    <button onclick="getLinkForUpdate(<?php echo $valor_vinculo->id;?>)">Atualizar</button>
+                </td>
             </tr>
             <?php endforeach ?>
 
@@ -195,33 +195,52 @@
 </div>
 
 <script>
+// filter rooms on select by selected uorg
+const domqs = document.querySelector.bind(document);
+const domqsAll = document.querySelectorAll.bind(document);
 
-    // filter rooms on select by selected uorg
-    const domqs = document.querySelector.bind(document);
-    const domqsAll = document.querySelectorAll.bind(document);
+const uorgSelect = domqs('#uorg_id');
 
-    const uorgSelect = domqs('#uorg_id');
+function showOptionByUorgId(uorgId) {
+    const options = domqsAll('#room_id > option');
 
-    function showOptionByUorgId (uorgId) {
-        const options = domqsAll('#room_id > option');
-
-        options.forEach((option) => {
-            if(option.id == uorgId) {
-                option.style.display = 'block';
-            }
-            else {
-                option.style.display = 'none';
-            }
-        })
-
-    }
-
-    uorgSelect.addEventListener('change', (ev) => {
-        const uorgId = ev.target.value;
-        showOptionByUorgId(uorgId);
-        domqs('#room_id').value = 'null';
+    options.forEach((option) => {
+        if (option.id == uorgId) {
+            option.style.display = 'block';
+        } else {
+            option.style.display = 'none';
+        }
     })
 
+}
+
+uorgSelect.addEventListener('change', (ev) => {
+    const uorgId = ev.target.value;
+    showOptionByUorgId(uorgId);
+    domqs('#room_id').value = 'null';
+})
+
+const collaboratorSelect = document.querySelector("select#collaborator");
+const uorgNameSelect = document.querySelector("select#uorg_id");
+const roomNumberSelect = document.querySelector("select#room_id");
+const papelInput = document.querySelector("input#papel");
+const vinculoInput = document.querySelector("input#vinculo");
+const phoneInput = document.querySelector("input#phone");
+const statusInput = document.querySelector("input#status");
+const horarioInput = document.querySelector("input#horario");
+
+function getLinkForUpdate(id) {
+    location.href =
+        `?update_row=${id}
+        &collaborator=${collaboratorSelect.value}
+        &uorgName=${uorgNameSelect.value}
+        &roomNumber=${roomNumberSelect.value}
+        &papel=${papelInput.value}
+        &vinculo=${vinculoInput.value}
+        &phone=${phoneInput.value}
+        &vinculoStatus=${statusInput.value}
+        &horario=${horarioInput.value}`;
+};
 </script>
 
 </html>
@@ -261,6 +280,7 @@
                 'vinculo_status' => $vinculo_status,
                 'horario' => $horario,
             ));
+            wp_safe_redirect( wp_get_referer() );
 
         }else{
             echo '<h1>Todos os campos são obrigatórios</h1>';
@@ -271,18 +291,60 @@
         global $wpdb;
         $id = sanitize_text_field($_GET['apagar_id']);
         $delete_person = $wpdb->delete("$table_vinculo", array('id' => $id));
+        wp_safe_redirect( wp_get_referer() );
     }
 
-    if(!empty($_GET['update_row'])){
+    if (isset($_GET['update_row'])) {
+        $collaborator_id = $_GET['collaborator'];
+        $uorg_id = $_GET['uorgName'];
+        $room_id = $_GET['roomNumber'];
+        $papel = $_GET['papel'];
+        $vinculo = $_GET['vinculo'];
+        $phone = $_GET['phone'];
+        $status = $_GET['vinculoStatus'];
+        $horario = $_GET['horario'];
+        foreach($uorg_room as $aux):
+            if($aux->uorg_id == $uorg_id && $aux->room_id == $room_id)
+                {
+                    $uorg_room_id = $aux->id;
+                }
+        endforeach;
+
         global $wpdb;
-        $id = sanitize_text_field($_GET['update_row']);
-        $update_person = $wpdb->update("$table_vinculo", array(
-        'id' => $id,
-        'name' => sanitize_text_field($_POST['name']),
-        'email' => sanitize_text_field($_POST['email']),
-        'function' => sanitize_text_field($_POST['function']),
-        'bond_type' => sanitize_text_field($_POST['bond_type']),
-        'department' => sanitize_text_field($_POST['department']),
-        'status' => sanitize_text_field($_POST['status'])));
+        
+        $id = intval( $_GET['update_row'] );
+        $table_vinculo = $wpdb->prefix.'vinculo'; 
+        
+        $data = array(
+            'collaborator_id' => $collaborator_id,
+            'uorg_room_id' => $uorg_room_id,
+            'phone' => $phone,
+            'papel' => $papel,
+            'vinculo_status' => $status,
+            'vinculo_type' => $vinculo,
+            'horario' => $horario
+        );
+            
+        $where = array(
+            'id' => $id
+        );
+
+        $update_vinculo = $wpdb->update(
+            $table_vinculo, 
+            $data,
+            array( 'id' => $id ),
+            array( '%s', '%s' ),
+            array( '%d' )
+        );
+
+        if ( false === $update_vinculo ) {
+            // Erro na atualização
+            echo '<script> alert("nao funcionou")</script>' . $wpdb->last_error;
+            
+        } else {
+            // Atualização realizada com sucesso
+            wp_safe_redirect( wp_get_referer() );
+        }
     }
+    
 ?>

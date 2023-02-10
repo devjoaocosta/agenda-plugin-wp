@@ -3,7 +3,7 @@
  * Plugin Name: Agenda projeto
  * Plugin URI: https://www.google.com/
  * Description: Projeto de agenda
- * Version: 0.9
+ * Version: 1.0
  * Author: João Costa 
  * Author URI: https://github.com/Repto1
  * 
@@ -19,6 +19,7 @@ if ( ! defined('ABSPATH')) {
 
 define ('PLUGIN_DIR', plugin_dir_path(__FILE__));
 
+include(ABSPATH . 'wp-includes/pluggable.php');
 require_once(PLUGIN_DIR . 'admin.php'); 
 require_once(PLUGIN_DIR . 'register.php'); 
 
