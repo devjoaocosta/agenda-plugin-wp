@@ -5,7 +5,7 @@
         ?>
 <html>
 <link rel="stylesheet" href="./style.css">
-<div class="container1">
+<div class="container ex">
     <h1>Inserir Colaborador</h1>
     <form method="post">
         <div class="input-group">
@@ -15,12 +15,14 @@
         </div>
         <br>
         <div class="input-group">
+
             <label>Email</label>
+
             <input method="post" type="text" name="email" id="email" class="form-control"
                 placeholder="exemplo@email.com">
         </div>
         <br>
-        <div class="input-group0">
+        <div class="input-group-button">
             <input type="submit" name="botao_collaborator" value="registrar" class="form-control btn btn-danger">
         </div>
     </form>
@@ -28,7 +30,20 @@
 
 
 <div class="container">
+
     <h1>Colaboradores</h1>
+    <button type="button" onclick="Mudarestado('list')">Mostrar / Esconder</button>
+</div>
+<script>
+function Mudarestado(el) {
+    var display = document.getElementById(el).style.display;
+    if (display == "none")
+        document.getElementById(el).style.display = 'block';
+    else
+        document.getElementById(el).style.display = 'none';
+}
+</script>
+<div id="list" class="container add">
     <table class="table table-striped">
         <thead>
             <tr>
@@ -49,8 +64,10 @@
                 <td><?php echo $valor_collaborator->fullname; ?></td>
                 <td><?php echo $valor_collaborator->email; ?></td>
                 <td>
+
                     <button onclick="location.href='?apagar_collaborator_id=<?php echo $valor_collaborator->id;?>'">Excluir</button>
                     <button onclick="getLinkForUpdateCollaborator(<?php echo $valor_collaborator->id;?>)">Atualizar</button>
+
                 </td>
             </tr>
             <?php endforeach ?>
@@ -60,17 +77,19 @@
 </div>
 
 
-<div class="container1">
+<div class="container ex">
     <h1>Inserir Unidade Organizacional</h1>
     <form method="post">
         <div class="input-group">
             <label>Nome</label>
+
             <input method="post" type="text" name="uorg_name" id="uorg_name" class="form-control" placeholder="Insira o nome aqui">
         </div>
         <br>
         <div class="input-group">
             <label>Email</label>
             <input method="post" type="text" name="email" id="uorg_email" class="form-control" placeholder="exemplo@email.com">
+
         </div>
         <br>
 
@@ -116,14 +135,26 @@
             </select>
         </div>
 
-        <div class="input-group0">
+        <div class="input-group-button">
             <input type="submit" name="botao_uorg" value="registrar" class="form-control btn btn-danger">
         </div>
     </form>
 </div>
 
-<div class="container">
+<div class="container ex type2">
     <h1>Unidades Organizacionais</h1>
+    <button type="button" onclick="Mudarestado('list2')">Mostrar / Esconder</button>
+</div>
+<script>
+function Mudarestado(el) {
+    var display = document.getElementById(el).style.display;
+    if (display == "none")
+        document.getElementById(el).style.display = 'block';
+    else
+        document.getElementById(el).style.display = 'none';
+}
+</script>
+<div id="list2" class="container add">
     <table class="table table-striped">
         <thead>
             <tr>
@@ -175,7 +206,7 @@
     </table>
 </div>
 
-<div class="container1">
+<div class="container ex">
     <h1>Inserir Sala</h1>
     <form method="post">
         <div class="input-group">
@@ -208,14 +239,26 @@
             </select>
         </div>
         <br>
-        <div class="input-group0">
+        <div class="input-group-button">
             <input type="submit" name="botao_room" value="registrar" class="form-control btn btn-danger">
         </div>
     </form>
 </div>
 
-<div class="container">
+<div class="container ex type2">
     <h1>Salas</h1>
+    <button type="button" onclick="Mudarestado('list3')">Mostrar / Esconder</button>
+</div>
+<script>
+function Mudarestado(el) {
+    var display = document.getElementById(el).style.display;
+    if (display == "none")
+        document.getElementById(el).style.display = 'block';
+    else
+        document.getElementById(el).style.display = 'none';
+}
+</script>
+<div id="list3" class="container add">
     <table class="table table-striped">
         <thead>
             <tr>
@@ -295,6 +338,7 @@ const uorgInput = document.querySelector("select#uorg_id");
 
 function getLinkForUpdateRoom(id) {
     location.href =`?update_room_row=${id}&roomNumber=${roomNumberInput.value}&predio=${predioInput.value}&andar=${andarInput.value}&uorg=${uorgInput.value}`;
+
 };
 </script>
 
@@ -490,6 +534,7 @@ function getLinkForUpdateRoom(id) {
         $delete_uorg_room = $wpdb->delete("$table_uorg_room", array('id' => $id_uorg_room));
         $delete_room = $wpdb->delete("$table_room", array('id' => $id_room));
         wp_safe_redirect( wp_get_referer() );
+
     }
 
     if (isset($_GET['update_room_row'])) {

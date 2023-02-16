@@ -18,7 +18,7 @@
 ?>
 <html>
 <link rel="stylesheet" href="./style.css">
-<div class="container1">
+<div class="container ex">
     <h1>Vincular Colaborador</h1>
     <form method="post">
         <div class="input-group">
@@ -109,7 +109,7 @@
     </form>
 </div>
 
-<div class="container">
+<div class="container add">
     <h1>Agenda</h1>
     <table class="table table-striped">
         <thead>
