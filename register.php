@@ -15,7 +15,9 @@
         </div>
         <br>
         <div class="input-group">
-            <label>E-mail</label>
+
+            <label>Email</label>
+
             <input method="post" type="text" name="email" id="email" class="form-control"
                 placeholder="exemplo@email.com">
         </div>
@@ -27,7 +29,8 @@
 </div>
 
 
-<div class="container ex type2">
+<div class="container">
+
     <h1>Colaboradores</h1>
     <button type="button" onclick="Mudarestado('list')">Mostrar / Esconder</button>
 </div>
@@ -61,10 +64,10 @@ function Mudarestado(el) {
                 <td><?php echo $valor_collaborator->fullname; ?></td>
                 <td><?php echo $valor_collaborator->email; ?></td>
                 <td>
-                    <button
-                        onclick="location.href='?apagar_collaborator_id=<?php echo $valor_collaborator->id;?>'">Excluir</button>
-                    <button
-                        onclick="getLinkForUpdateCollaborator(<?php echo $valor_collaborator->id;?>)">Atualizar</button>
+
+                    <button onclick="location.href='?apagar_collaborator_id=<?php echo $valor_collaborator->id;?>'">Excluir</button>
+                    <button onclick="getLinkForUpdateCollaborator(<?php echo $valor_collaborator->id;?>)">Atualizar</button>
+
                 </td>
             </tr>
             <?php endforeach ?>
@@ -79,14 +82,14 @@ function Mudarestado(el) {
     <form method="post">
         <div class="input-group">
             <label>Nome</label>
-            <input method="post" type="text" name="uorg_name" id="uorg_name" class="form-control"
-                placeholder="Insira o nome aqui">
+
+            <input method="post" type="text" name="uorg_name" id="uorg_name" class="form-control" placeholder="Insira o nome aqui">
         </div>
         <br>
         <div class="input-group">
-            <label>E-mail</label>
-            <input method="post" type="text" name="email" id="uorg_email" class="form-control"
-                placeholder="exemplo@email.com">
+            <label>Email</label>
+            <input method="post" type="text" name="email" id="uorg_email" class="form-control" placeholder="exemplo@email.com">
+
         </div>
         <br>
 
@@ -334,8 +337,8 @@ const andarInput = document.querySelector("input#andar");
 const uorgInput = document.querySelector("select#uorg_id");
 
 function getLinkForUpdateRoom(id) {
-    location.href =
-        `?update_room_row=${id}&roomNumber=${roomNumberInput.value}&predio=${predioInput.value}&andar=${andarInput.value}&uorg=${uorgInput.value}`;
+    location.href =`?update_room_row=${id}&roomNumber=${roomNumberInput.value}&predio=${predioInput.value}&andar=${andarInput.value}&uorg=${uorgInput.value}`;
+
 };
 </script>
 
@@ -531,6 +534,7 @@ function getLinkForUpdateRoom(id) {
         $delete_uorg_room = $wpdb->delete("$table_uorg_room", array('id' => $id_uorg_room));
         $delete_room = $wpdb->delete("$table_room", array('id' => $id_room));
         wp_safe_redirect( wp_get_referer() );
+
     }
 
     if (isset($_GET['update_room_row'])) {
