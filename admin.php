@@ -107,10 +107,28 @@
             <input type="submit" name="botao" value="registrar" class="form-control btn btn-danger">
         </div>
     </form>
+
 </div>
 
+<?php
+    global $wpdb;
+
+    $table_vinculo = $wpdb->prefix.'vinculo';
+    $table_collaborator = $wpdb->prefix.'collaborator';
+    $table_uorg_room = $wpdb->prefix.'uorg_room';
+    $table_uorg = $wpdb->prefix.'uorg';
+
+    $resultado = $wpdb->get_results("SELECT * FROM $table_vinculo ORDER BY id ASC");
+    $collaborator = $wpdb->get_results("SELECT * FROM $table_collaborator ORDER BY id ASC");
+    $uorg_room = $wpdb->get_results("SELECT * FROM $table_uorg_room ORDER BY id ASC");
+    $uorg = $wpdb->get_results("SELECT * FROM $table_uorg ORDER BY id ASC");
+?>
+
+<?php
+            foreach($uorg as $uorg_value):
+        ?>
 <div class="container add">
-    <h1>Agenda</h1>
+    <h1><?php echo $uorg_value->uorg_name ?></h1>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -119,29 +137,26 @@
                 <th scope="col">Uorg</th>
                 <th scope="col">Sala</th>
                 <th scope="col">Papel</th>
+                <th scope="col">Fone</th>
                 <th scope="col">Vinculo</th>
                 <th scope="col">Status</th>
-                <th scope="col">Fone</th>
                 <th scope="col">Horario</th>
                 <th scope="col">Ações</th>
             </tr>
         </thead>
-        <?php
-                global $wpdb;
 
-                $table_vinculo = $wpdb->prefix.'vinculo';
-                $table_collaborator = $wpdb->prefix.'collaborator';
-                $table_uorg_room = $wpdb->prefix.'uorg_room';
-                $table_uorg = $wpdb->prefix.'uorg';
-
-                $resultado = $wpdb->get_results("SELECT * FROM $table_vinculo ORDER BY id ASC");
-                $collaborator = $wpdb->get_results("SELECT * FROM $table_collaborator ORDER BY id ASC");
-                $uorg_room = $wpdb->get_results("SELECT * FROM $table_uorg_room ORDER BY id ASC");
-                $uorg = $wpdb->get_results("SELECT * FROM $table_uorg ORDER BY id ASC");
-
-        ?>
         <tbody>
             <?php foreach ($resultado as $valor_vinculo): ?>
+
+            <?php foreach($uorg_room as $uorg_room_value): ?>
+            <?php if($uorg_room_value->id == $valor_vinculo->uorg_room_id)
+                            {
+                            foreach($uorg as $uorg_value):
+                                if($uorg_value->id == $uorg_room_value->uorg_id) echo $uorg_value->uorg_name;
+                            endforeach;
+                            };
+                        ?>
+            <?php endforeach ?>
 
             <tr>
                 <th scope="row"><?php echo $valor_vinculo->id; ?></th>
@@ -174,8 +189,8 @@
                             foreach($room as $room_value):
                                 if($room_value->id == $uorg_room_value->room_id) echo $room_value->room_number;
                             endforeach;
-                        };
-                    ?>
+                            };
+                        ?>
                     <?php endforeach ?>
                 </td>
                 <td><?php echo $valor_vinculo->papel; ?></td>
@@ -193,6 +208,20 @@
         </tbody>
     </table>
 </div>
+<?php
+            endforeach;
+        ?>
+
+
+
+
+
+
+
+
+
+
+
 
 <script>
 // filter rooms on select by selected uorg
@@ -245,7 +274,7 @@ function getLinkForUpdate(id) {
 
 </html>
 <?php
-    };
+    }
 
     global $wpdb;
 
