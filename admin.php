@@ -126,6 +126,7 @@
 
 <?php
             foreach($uorg as $uorg_value):
+            $aux_uorg = $uorg_value->id;
         ?>
 <div class="container add">
     <h1><?php echo $uorg_value->uorg_name ?></h1>
@@ -147,25 +148,19 @@
 
         <tbody>
             <?php foreach ($resultado as $valor_vinculo): ?>
-
             <?php foreach($uorg_room as $uorg_room_value): ?>
-            <?php if($uorg_room_value->id == $valor_vinculo->uorg_room_id)
-                            {
-                            foreach($uorg as $uorg_value):
-                                if($uorg_value->id == $uorg_room_value->uorg_id) echo $uorg_value->uorg_name;
-                            endforeach;
-                            };
-                        ?>
-            <?php endforeach ?>
+                <?php if($uorg_room_value->id == $valor_vinculo->uorg_room_id)
+                    {
+                    if( $uorg_room_value->uorg_id == $aux_uorg ) 
+                    if ( $valor_vinculo->uorg_room_id == $uorg_room_value->id ){
+                    ?>
 
             <tr>
                 <th scope="row"><?php echo $valor_vinculo->id; ?></th>
-                <td>
-                    <?php foreach($collaborator as $collaborator_value): ?>
+                <td> <?php foreach($collaborator as $collaborator_value): ?>
                     <?php if($collaborator_value->id == $valor_vinculo->collaborator_id) echo $collaborator_value->fullname; ?>
-                    <?php endforeach ?>
-                </td>
-                <td>
+                    <?php endforeach ?></td>
+                    <td>
                     <?php foreach($uorg_room as $uorg_room_value): ?>
                     <?php if($uorg_room_value->id == $valor_vinculo->uorg_room_id)
                             {
@@ -203,8 +198,15 @@
                     <button onclick="getLinkForUpdate(<?php echo $valor_vinculo->id;?>)">Atualizar</button>
                 </td>
             </tr>
+            <?php  
+                          
+                            };
+                        }
+                        ?>
             <?php endforeach ?>
 
+           
+            <?php endforeach ?>
         </tbody>
     </table>
 </div>
@@ -240,7 +242,6 @@ function showOptionByUorgId(uorgId) {
             option.style.display = 'none';
         }
     })
-
 }
 
 uorgSelect.addEventListener('change', (ev) => {
