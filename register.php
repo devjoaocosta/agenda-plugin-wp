@@ -7,16 +7,16 @@
 <link rel="stylesheet" href="./style.css">
 <div class="container ex">
     <h1>Inserir Colaborador</h1>
-    <form method="post">
-        <div class="input-group">
+    <form class="inserir" method="post">
+        <div class="input-group registro">
             <label>Nome</label>
             <input method="post" type="text" name="fullname" id="fullname" class="form-control"
                 placeholder="Insira o nome aqui">
         </div>
         <br>
-        <div class="input-group">
+        <div class="input-group registro">
 
-            <label>Email</label>
+            <label>E-mail</label>
 
             <input method="post" type="text" name="email" id="email" class="form-control"
                 placeholder="exemplo@email.com">
@@ -29,10 +29,9 @@
 </div>
 
 
-<div class="container">
-
+<div class="container ex type2">
     <h1>Colaboradores</h1>
-    <button type="button" onclick="Mudarestado('list')">Mostrar / Esconder</button>
+    <button type="button" onclick="Mudarestado('list')"><img src="./add.png" alt=""></button>
 </div>
 <script>
 function Mudarestado(el) {
@@ -44,11 +43,12 @@ function Mudarestado(el) {
 }
 </script>
 <div id="list" class="container add">
-    <table class="table table-striped">
+    <table>
         <thead>
             <tr>
                 <th scope="col">Nome</th>
                 <th scope="col">Email</th>
+                <th scope="col">Ações</th>
             </tr>
         </thead>
         <?php 
@@ -65,8 +65,10 @@ function Mudarestado(el) {
                 <td><?php echo $valor_collaborator->email; ?></td>
                 <td>
 
-                    <button onclick="location.href='?apagar_collaborator_id=<?php echo $valor_collaborator->id;?>'">Excluir</button>
-                    <button onclick="getLinkForUpdateCollaborator(<?php echo $valor_collaborator->id;?>)">Atualizar</button>
+                    <button
+                        onclick="location.href='?apagar_collaborator_id=<?php echo $valor_collaborator->id;?>'">Excluir</button>
+                    <button
+                        onclick="getLinkForUpdateCollaborator(<?php echo $valor_collaborator->id;?>)">Atualizar</button>
 
                 </td>
             </tr>
@@ -79,21 +81,23 @@ function Mudarestado(el) {
 
 <div class="container ex">
     <h1>Inserir Unidade Organizacional</h1>
-    <form method="post">
-        <div class="input-group">
+    <form class="inserir" method="post">
+        <div class="input-group registro">
             <label>Nome</label>
 
-            <input method="post" type="text" name="uorg_name" id="uorg_name" class="form-control" placeholder="Insira o nome aqui">
+            <input method="post" type="text" name="uorg_name" id="uorg_name" class="form-control"
+                placeholder="Insira o nome aqui">
         </div>
         <br>
-        <div class="input-group">
-            <label>Email</label>
-            <input method="post" type="text" name="email" id="uorg_email" class="form-control" placeholder="exemplo@email.com">
+        <div class="input-group registro">
+            <label>E-mail</label>
+            <input method="post" type="text" name="email" id="uorg_email" class="form-control"
+                placeholder="exemplo@email.com">
 
         </div>
         <br>
 
-        <div class="input-group">
+        <div class="input-group registro">
             <label>Uorg Mãe</label>
             <select id="uorg_parent_id" name="uorg_parent_id">
                 <?php 
@@ -107,7 +111,7 @@ function Mudarestado(el) {
             </select>
         </div>
         <br>
-        <div class="input-group">
+        <div class="input-group registro">
             <label>Responsável</label>
             <select method="post" type="text" id="uorg_responsible" name="responsible_id">
                 <?php 
@@ -121,7 +125,7 @@ function Mudarestado(el) {
             </select>
         </div>
 
-        <div class="input-group">
+        <div class="input-group registro">
             <label>Substituto</label>
             <select method="post" type="text" id="uorg_substitute" name="substitute_id">
                 <?php 
@@ -143,7 +147,7 @@ function Mudarestado(el) {
 
 <div class="container ex type2">
     <h1>Unidades Organizacionais</h1>
-    <button type="button" onclick="Mudarestado('list2')">Mostrar / Esconder</button>
+    <button type="button" onclick="Mudarestado('list2')"><img src="./add.png" alt=""></button>
 </div>
 <script>
 function Mudarestado(el) {
@@ -208,24 +212,24 @@ function Mudarestado(el) {
 
 <div class="container ex">
     <h1>Inserir Sala</h1>
-    <form method="post">
-        <div class="input-group">
-            <label>Numero</label>
+    <form class="inserir" method="post">
+        <div class="input-group registro">
+            <label>Número</label>
             <input type="text" name="room_number" id="room_number" class="form-control"
-                placeholder="Insira o nome aqui">
+                placeholder="Insira o número da sala">
         </div>
         <br>
-        <div class="input-group">
-            <label>Predio</label>
-            <input type="text" name="predio" id="predio" class="form-control" placeholder="exemplo@email.com">
+        <div class="input-group registro">
+            <label>Prédio</label>
+            <input type="text" name="predio" id="predio" class="form-control" placeholder="Insira o nome do prédio">
         </div>
         <br>
-        <div class="input-group">
+        <div class="input-group registro">
             <label>Andar</label>
-            <input type="text" name="andar" id="andar" class="form-control" placeholder="exemplo@email.com">
+            <input type="text" name="andar" id="andar" class="form-control" placeholder="insira o andar">
         </div>
         <br>
-        <div class="input-group">
+        <div class="input-group registro">
             <label>Unidade Organizacional</label>
             <select id="uorg_id" name="uorg_id">
                 <?php 
@@ -247,7 +251,7 @@ function Mudarestado(el) {
 
 <div class="container ex type2">
     <h1>Salas</h1>
-    <button type="button" onclick="Mudarestado('list3')">Mostrar / Esconder</button>
+    <button type="button" onclick="Mudarestado('list3')"><img src="./add.png" alt=""></button>
 </div>
 <script>
 function Mudarestado(el) {
@@ -337,7 +341,8 @@ const andarInput = document.querySelector("input#andar");
 const uorgInput = document.querySelector("select#uorg_id");
 
 function getLinkForUpdateRoom(id) {
-    location.href =`?update_room_row=${id}&roomNumber=${roomNumberInput.value}&predio=${predioInput.value}&andar=${andarInput.value}&uorg=${uorgInput.value}`;
+    location.href =
+        `?update_room_row=${id}&roomNumber=${roomNumberInput.value}&predio=${predioInput.value}&andar=${andarInput.value}&uorg=${uorgInput.value}`;
 
 };
 </script>
