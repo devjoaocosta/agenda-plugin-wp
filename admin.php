@@ -20,39 +20,40 @@
 <link rel="stylesheet" href="./style.css">
 <div class="container ex">
     <h1>Vincular Colaborador</h1>
-    <form method="post">
-        <div class="input-group">
-            <label>Colaborador</label>
-            <select id="collaborator" name="collaborator_id">
-                <?php
+    <form class="vincular" method="post">
+        <div class="linha1">
+            <div class="input-group agenda">
+                <label>Colaborador</label>
+                <select id="collaborator" name="collaborator_id">
+                    <?php
                     global $wpdb;
                     $table_collaborator = $wpdb->prefix.'collaborator';
                     $resultado_collaborator = $wpdb->get_results("SELECT * FROM $table_collaborator ORDER BY id ASC");
                 ?>
-                <?php foreach ($resultado_collaborator as $valor): ?>
-                <option value="<?php echo $valor->id ?>"><?php echo $valor->fullname?></option>
-                <?php endforeach ?>
-            </select>
-        </div>
-        <br>
-        <div class="input-group">
-            <label>Unidade Organizacional</label>
-            <select id="uorg_id" name="uorg_id">
-                <?php
+                    <?php foreach ($resultado_collaborator as $valor): ?>
+                    <option value="<?php echo $valor->id ?>"><?php echo $valor->fullname?></option>
+                    <?php endforeach ?>
+                </select>
+            </div>
+            <br>
+            <div class="input-group agenda maior">
+                <label>Unidade Organizacional</label>
+                <select id="uorg_id" name="uorg_id">
+                    <?php
                     global $wpdb;
                     $table_uorg = $wpdb->prefix.'uorg';
                     $uorg = $wpdb->get_results("SELECT * FROM $table_uorg ORDER BY id ASC");
                 ?>
-                <?php foreach ($uorg as $uorg_value): ?>
-                <option value="<?php echo $uorg_value->id ?>"><?php echo $uorg_value->uorg_name?></option>
-                <?php endforeach ?>
-            </select>
-        </div>
-        <br>
-        <div class="input-group">
-            <label>Sala</label>
-            <select id="room_id" name="room_id">
-                <?php
+                    <?php foreach ($uorg as $uorg_value): ?>
+                    <option value="<?php echo $uorg_value->id ?>"><?php echo $uorg_value->uorg_name?></option>
+                    <?php endforeach ?>
+                </select>
+            </div>
+            <br>
+            <div class="input-group agenda menor label">
+                <label>Sala</label>
+                <select id="room_id" name="room_id">
+                    <?php
                     $table_room = $wpdb->prefix.'room';
                     $table_uorg_room = $wpdb->prefix.'uorg_room';
 
@@ -63,48 +64,50 @@
                         ORDER BY id ASC
                     ");
                 ?>
-                <option value="null" style="display: none;" selected> </option>
+                    <option value="null" style="display: none;" selected> </option>
 
-                <?php foreach ($rooms as $room): ?>
-                <option id="<?= $room->uorg_id; ?>" value="<?= $room->id; ?>" style="display: none;">
-                    <?= $room->room_number; ?>
-                </option>
-                <?php endforeach ?>
-            </select>
+                    <?php foreach ($rooms as $room): ?>
+                    <option id="<?= $room->uorg_id; ?>" value="<?= $room->id; ?>" style="display: none;">
+                        <?= $room->room_number; ?>
+                    </option>
+                    <?php endforeach ?>
+                </select>
+            </div>
+            <br>
+            <div class="input-group agenda label">
+                <label>Papel</label>
+                <input type="text" id="papel" name="papel" class="form-control" placeholder="Insira a função aqui">
+            </div>
+            <br>
+            <div class="input-group agenda label">
+                <label>Vínculo</label>
+                <input type="text" id="vinculo" name="vinculo_type" class="form-control"
+                    placeholder="Insira o tipo de vínculo">
+            </div>
         </div>
-        <br>
-        <div class="input-group">
-            <label>Papel</label>
-            <input type="text" id="papel" name="papel" class="form-control" placeholder="Insira a função aqui">
-        </div>
-        <br>
-        <div class="input-group">
-            <label>Vinculo</label>
-            <input type="text" id="vinculo" name="vinculo_type" class="form-control"
-                placeholder="Insira o tipo de vinculo aqui">
-        </div>
-        <br>
-        <div class="input-group">
-            <label>Fone</label>
-            <input type="text" id="phone" name="phone" class="form-control" placeholder="Insira o Fone">
-        </div>
-        <br>
-        <div class="input-group">
-            <label>Status</label>
-            <input type="text" id="status" name="vinculo_status" class="form-control"
-                placeholder="Insira o tipo de vinculo aqui">
+        <div class="linha2">
+            <br>
+            <div class="input-group agenda">
+                <label>Fone</label>
+                <input type="text" minlength="4" maxlength="4" id="phone" name="phone" class="form-control"
+                    placeholder="Insira o Fone">
+            </div>
+            <br>
+            <div class="input-group agenda maior">
+                <label>Status</label>
+                <input type="text" id="status" name="vinculo_status" class="form-control"
+                    placeholder="Insira o status">
 
-        </div>
-        <br>
-        <div class="input-group">
-            <label>Horario</label>
-            <input type="text" id="horario" name="horario" class="form-control" placeholder="Insira o Horario">
-        </div>
-        <br>
-
-
-        <div class="input-group0">
-            <input type="submit" name="botao" value="registrar" class="form-control btn btn-danger">
+            </div>
+            <br>
+            <div class="input-group agenda menor label">
+                <label>Horário</label>
+                <input type="text" id="horario" name="horario" class="form-control" placeholder="Insira o horário">
+            </div>
+            <br>
+            <div class="input-group-button">
+                <input type="submit" name="botao" value="registrar" class="form-control btn btn-danger">
+            </div>
         </div>
     </form>
 
@@ -128,8 +131,21 @@
             foreach($uorg as $uorg_value):
             $aux_uorg = $uorg_value->id;
         ?>
-<div class="container add">
+
+<div id="<?php echo $uorg_value->id;?>" class="container ex type2">
     <h1><?php echo $uorg_value->uorg_name ?></h1>
+    <button type="button" onclick="Mudarestado('uorg<?php echo$uorg_value->id;?>')"><img src="./add.png" alt=""></button>
+</div>
+<script>
+    function Mudarestado(el) {
+        var display = document.querySelector(`#${el}`).style.display;
+        if (display == "none")
+            document.querySelector(`#${el}`).style.display = 'block';
+        else
+            document.querySelector(`#${el}`).style.display = 'none';
+    }
+</script>
+<div id='uorg<?php echo$uorg_value->id;?>' class="container add">
     <table class="table table-striped">
         <thead>
             <tr>
@@ -139,9 +155,9 @@
                 <th scope="col">Sala</th>
                 <th scope="col">Papel</th>
                 <th scope="col">Fone</th>
-                <th scope="col">Vinculo</th>
+                <th scope="col">Vínculo</th>
                 <th scope="col">Status</th>
-                <th scope="col">Horario</th>
+                <th scope="col">Horário</th>
                 <th scope="col">Ações</th>
             </tr>
         </thead>
@@ -149,7 +165,7 @@
         <tbody>
             <?php foreach ($resultado as $valor_vinculo): ?>
             <?php foreach($uorg_room as $uorg_room_value): ?>
-                <?php if($uorg_room_value->id == $valor_vinculo->uorg_room_id)
+            <?php if($uorg_room_value->id == $valor_vinculo->uorg_room_id)
                     {
                     if( $uorg_room_value->uorg_id == $aux_uorg ) 
                     if ( $valor_vinculo->uorg_room_id == $uorg_room_value->id ){
@@ -160,7 +176,9 @@
                 <td> <?php foreach($collaborator as $collaborator_value): ?>
                     <?php if($collaborator_value->id == $valor_vinculo->collaborator_id) echo $collaborator_value->fullname; ?>
                     <?php endforeach ?></td>
-                    <td>
+
+                <td>
+
                     <?php foreach($uorg_room as $uorg_room_value): ?>
                     <?php if($uorg_room_value->id == $valor_vinculo->uorg_room_id)
                             {
@@ -205,7 +223,8 @@
                         ?>
             <?php endforeach ?>
 
-           
+
+
             <?php endforeach ?>
         </tbody>
     </table>

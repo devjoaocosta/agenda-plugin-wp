@@ -37,27 +37,27 @@ div.container.type2 button {
 div.container.ex h1 {
   font-weight: bold;
 }
-/* div.container.ex.type2 { 
-     alig 
-  }*/
 div.container.ex.type2 button {
   text-align: right;
 }
-div.input-group label {
+div.input-group.agenda label, div.input-group.registro label {
   margin-left: 1.5em;
 }
-div.input-group input {
+div.input-group.agenda input, div.input-group.agenda select {
+  border-radius: 5px;
+}
+div.input-group.registro input, div.input-group.registro select {
   border-radius: 5px;
 }
 div.input-group-button input {
-  margin-left: 1em;
+  margin-left: 5.3em;
   background: #e9e9e9;
   color: rgb(0, 0, 0);
   border: 1px solid rgb(160, 160, 160);
   border-radius: 5px;
   box-shadow: 3px 3px 3px rgb(145, 145, 145);
   text-shadow: none;
-  height: 1.6em;
+  height: 2em;
 }
 div.input-group-button input:hover {
   background: #a1a1a1;
@@ -67,15 +67,74 @@ div.input-group-button input:hover {
   box-shadow: 1px 1px 1px rgb(145, 145, 145);
   text-shadow: none;
 }
-table td {
-  width: 15em;
+div.input-group-button.registro input {
+  margin-left: 1em;
+  background: #e9e9e9;
+  color: rgb(0, 0, 0);
+  border: 1px solid rgb(160, 160, 160);
+  border-radius: 5px;
+  box-shadow: 3px 3px 3px rgb(145, 145, 145);
+  text-shadow: none;
+  height: 1.6em;
+}
+div.list table td, div.list2 table td, div.list3 table td, div.container.add table td {
+  width: 25em;
   /* text-align: center; */
   height: 2em;
 }
-table th {
+div.list table th, div.list2 table th, div.list3 table th, div.container.add table th {
   text-align: left;
 }
-form {
+div.list table tbody tr {
+  border-color: 10px #19aa83;
+  border-top-color: solid 5px #aa1919;
+}
+form.inserir {
   margin-top: -0.9em;
   display: inline-flex;
+}
+form.vincular {
+  margin-top: 1em;
+}
+form.vincular div.linha1,
+div.linha2 {
+  display: inline-flex;
+  margin-top: 1em;
+}
+div.input-group.agenda label {
+  display: inline-block;
+  width: 75px;
+}
+div.input-group.agenda select,
+input {
+  width: 190px;
+}
+/* div.input-group.maior select,
+div.input-group.maior input {
+  width: 150px;
+} */
+div.input-group.maior label {
+  width: 150px;
+}
+div.input-group.menor select,
+div.input-group.menor input {
+  width: 115px;
+}
+div.input-group.label label {
+  width: 50px;
+}
+div.container.add table td button {
+  background: #e9e9e9;
+  color: rgb(0, 0, 0);
+  border: 1px solid rgb(160, 160, 160);
+  border-radius: 5px;
+  text-shadow: none;
+  height: 2em;
+}
+div.container.add table td button:hover {
+  background: #a1a1a1;
+  color: #fff;
+  border: 1px solid rgb(160, 160, 160);
+  border-radius: 5px;
+  text-shadow: none;
 }

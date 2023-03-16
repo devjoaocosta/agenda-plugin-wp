@@ -3,7 +3,7 @@
  * Plugin Name: Agenda projeto
  * Plugin URI: https://www.google.com/
  * Description: Projeto de agenda
- * Version: 1.0
+ * Version: 1.1
  * Author: João Costa 
  * Author URI: https://github.com/Repto1
  * 
@@ -107,4 +107,4 @@ function jal_install() {
 
 
 
-?> 
+?>
