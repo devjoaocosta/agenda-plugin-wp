@@ -131,6 +131,7 @@
             foreach($uorg as $uorg_value):
             $aux_uorg = $uorg_value->id;
         ?>
+
 <div id="<?php echo $uorg_value->id;?>" class="container ex type2">
     <h1><?php echo $uorg_value->uorg_name ?></h1>
     <button type="button" onclick="Mudarestado('uorg<?php echo$uorg_value->id;?>')"><img src="./add.png" alt=""></button>
@@ -175,7 +176,9 @@
                 <td> <?php foreach($collaborator as $collaborator_value): ?>
                     <?php if($collaborator_value->id == $valor_vinculo->collaborator_id) echo $collaborator_value->fullname; ?>
                     <?php endforeach ?></td>
+
                 <td>
+
                     <?php foreach($uorg_room as $uorg_room_value): ?>
                     <?php if($uorg_room_value->id == $valor_vinculo->uorg_room_id)
                             {
@@ -219,6 +222,7 @@
                         }
                         ?>
             <?php endforeach ?>
+
 
 
             <?php endforeach ?>
